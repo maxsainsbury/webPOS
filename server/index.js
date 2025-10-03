@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const { selectItems } = require('./mysqlConnection/items.js');
 
 console.log(app);
-
 app.use(cors());
 
+
 app.get('/', (req, res) => {
-    res.send('Hello from our server!');
+    selectItems();
 });
 
 app.listen(8080, () => {
