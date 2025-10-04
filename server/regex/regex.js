@@ -1,2 +1,3 @@
-export const allNumbers = /^\d+$/;
+const allNumbers = /^\d+$/;
 
+module.exports = {allNumbers};
