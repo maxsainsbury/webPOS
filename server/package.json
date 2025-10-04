@@ -14,5 +14,9 @@
     "expree": "^2.1.0",
     "mysql2": "^3.15.1"
   },
-  "exports": "./mysqlConnection/items.js"
+  "exports": {
+    "./regex": "./regex/regex.js",
+    "." : "./mysqlConnection/items.js",
+    "./helpers": "./helpers/helperFunctions.js"
+  }
 }
