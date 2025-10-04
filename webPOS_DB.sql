@@ -45,9 +45,9 @@ DROP TABLE IF EXISTS `webPOS_DB`.`categories` ;
 
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`categories` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL,
+  `category_name` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`category_id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+  UNIQUE INDEX `name_UNIQUE` (`category_name` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -71,11 +71,10 @@ DROP TABLE IF EXISTS `webPOS_DB`.`items` ;
 
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
   `item_id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NOT NULL,
+  `item_name` VARCHAR(100) NOT NULL,
   `category_id` INT NOT NULL,
-  `price` DECIMAL(6,2) NOT NULL,
   `size` VARCHAR(20) NULL,
-  `is_available` TINYINT NULL DEFAULT 1,
+  `is_available` BIT(1) NULL DEFAULT 1,
   `tax_id` INT NOT NULL,
   PRIMARY KEY (`item_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
@@ -103,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mods` (
   `name` VARCHAR(50) NULL,
   `price` DECIMAL(10,2) NULL DEFAULT 0,
   `category_id` INT NOT NULL,
-  `is_available` INT NULL,
+  `is_available` BIT(1) NULL,
   `tax_id` INT NOT NULL,
   PRIMARY KEY (`mod_id`),
   INDEX `mod_tax_fk_idx` (`tax_id` ASC) VISIBLE,
@@ -183,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `order_number` INT NOT NULL,
   `order_type` ENUM('Dine-in', 'Takeout', 'Delivery') NOT NULL,
   `order_status` ENUM('Scheduled', 'Pending', 'Preparing', 'Ready', 'Out for Delivery', 'Completed', 'Cancelled') NULL,
-  `is_future_order` TINYINT NULL,
+  `is_future_order` BIT(1) NULL,
   `scheduled_date` DATE NULL,
   `scheduled_time` TIME NULL,
   `subtotal` DECIMAL(8,2) NOT NULL,
