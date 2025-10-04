@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
   PRIMARY KEY (`item_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   INDEX `items_tax_fk_idx` (`tax_id` ASC) VISIBLE,
-  CONSTRAINT `category_fk`
+  CONSTRAINT `category_item_fk`
     FOREIGN KEY (`category_id`)
     REFERENCES `webPOS_DB`.`categories` (`category_id`)
     ON DELETE NO ACTION
@@ -94,20 +94,6 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`mod_categories`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`mod_categories` ;
-
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mod_categories` (
-  `mod_category_id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL,
-  `description` TEXT NULL,
-  PRIMARY KEY (`mod_category_id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `webPOS_DB`.`mods`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `webPOS_DB`.`mods` ;
@@ -116,20 +102,20 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mods` (
   `mod_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NULL,
   `price` DECIMAL(10,2) NULL DEFAULT 0,
-  `mod_category_id` INT NOT NULL,
+  `category_id` INT NOT NULL,
   `is_available` INT NULL,
   `tax_id` INT NOT NULL,
   PRIMARY KEY (`mod_id`),
-  INDEX `mod_category_fk_idx` (`mod_category_id` ASC) VISIBLE,
   INDEX `mod_tax_fk_idx` (`tax_id` ASC) VISIBLE,
-  CONSTRAINT `mod_category_fk`
-    FOREIGN KEY (`mod_category_id`)
-    REFERENCES `webPOS_DB`.`mod_categories` (`mod_category_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `mod_tax_fk`
     FOREIGN KEY (`tax_id`)
     REFERENCES `webPOS_DB`.`tax_rates` (`tax_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `category_mod_fk`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `webPOS_DB`.`categories` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -294,6 +280,41 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`payments` (
   CONSTRAINT `order_id_fk`
     FOREIGN KEY (`order_id`)
     REFERENCES `webPOS_DB`.`orders` (`order_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `webPOS_DB`.`prices`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `webPOS_DB`.`prices` ;
+
+CREATE TABLE IF NOT EXISTS `webPOS_DB`.`prices` (
+  `price_id` INT NOT NULL AUTO_INCREMENT,
+  `price` DECIMAL(6,2) NULL,
+  PRIMARY KEY (`price_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `webPOS_DB`.`price_categorie`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `webPOS_DB`.`price_categorie` ;
+
+CREATE TABLE IF NOT EXISTS `webPOS_DB`.`price_categorie` (
+  `price_id` INT NOT NULL,
+  `categorie_id` INT NOT NULL,
+  PRIMARY KEY (`price_id`, `categorie_id`),
+  INDEX `item_fk_idx` (`categorie_id` ASC) VISIBLE,
+  CONSTRAINT `item_fk`
+    FOREIGN KEY (`categorie_id`)
+    REFERENCES `webPOS_DB`.`categories` (`category_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `price_fk`
+    FOREIGN KEY (`price_id`)
+    REFERENCES `webPOS_DB`.`prices` (`price_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
