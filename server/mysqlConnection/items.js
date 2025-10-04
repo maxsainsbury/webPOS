@@ -20,7 +20,7 @@ const selectItemsByCategory = async (categoryId) => {
 const selectItemById = async (itemId) => {
     try {
         const [results, fields] = await pool.query(
-            'SELECT * FROM `items` WHERE `id`=?',
+            'SELECT * FROM `items` WHERE `item_id`=?',
             [itemId]
         );
         results[0].is_available = intToBool(results[0].is_available[0]);
