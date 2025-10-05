@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const { selectItemsByCategory, selectItemById } = require('./mysqlConnection/items.js');
+const { selectModsByCategory } = require('./mysqlConnection/mods.js');
 const { selectCategory } = require('./mysqlConnection/categories.js');
 const { selectCustomerByPhone, addCustomer, updateCustomer } = require('./mysqlConnection/customers.js');
 const { allNumbers, phoneNumberRegex } = require('./regex/regex.js');
@@ -49,6 +50,23 @@ app.get('/items/:id', async (req, res) => {
         console.log(error.message);
     }
 });
+
+app.get('/mods/:id', async (req, res) => {
+    try {
+        if(req.params.id.match(allNumbers)) {
+            const results = await selectModsByCategory(req.params.id);
+            console.log(results);
+            if(results.length) {
+                res.send(results);
+            }
+            else {
+                res.sendStatus(404).json({ error: 'Not Found' });
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 app.get('/categories', async (req, res) => {
     try {
