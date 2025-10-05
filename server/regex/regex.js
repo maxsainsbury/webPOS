@@ -1,5 +1,5 @@
 const allNumbers = /^\d+$/;
 
-const phoneNumber = /^\d{10}$/;
+const phoneNumberRegex = /^\d{10}$/;
 
-module.exports = {allNumbers , phoneNumber};
+module.exports = {allNumbers , phoneNumberRegex};

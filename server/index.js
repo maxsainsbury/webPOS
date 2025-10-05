@@ -4,7 +4,7 @@ const cors = require('cors');
 const { selectItemsByCategory, selectItemById } = require('./mysqlConnection/items.js');
 const { selectCategory } = require('./mysqlConnection/categories.js');
 const { selectCustomerByPhone, addCustomer, updateCustomer } = require('./mysqlConnection/customers.js');
-const { allNumbers, phoneNumber } = require('./regex/regex.js');
+const { allNumbers, phoneNumberRegex } = require('./regex/regex.js');
 
 console.log(app);
 app.use(express.json());
@@ -67,8 +67,11 @@ app.get('/categories', async (req, res) => {
 
 app.get('/customers/:phoneNumber', async (req, res) => {
     try {
-        if(req.params.phoneNumber.match(phoneNumber)) {
-            const results = await selectCustomerByPhone(req.params.phoneNumber);
+        console.log(req.params.phoneNumber);
+        const phoneNumber = req.params.phoneNumber.replace(/\D/g, '');
+        console.log(phoneNumber);
+        if(phoneNumber.match(phoneNumberRegex)) {
+            const results = await selectCustomerByPhone(phoneNumber);
             if(results) {
                 res.send(results);
             }

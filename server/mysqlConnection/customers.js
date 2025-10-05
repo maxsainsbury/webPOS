@@ -3,7 +3,7 @@ const pool = require('./connection.js');
 const selectCustomerByPhone = async (phoneNumber) => {
     try {
         const [results, fields] = await pool.query(
-            `SELECT * FROM customers WHERE phoneNumber = ?`,
+            `SELECT * FROM customers WHERE phone = ?`,
             [phoneNumber]
         );
         return results[0];
