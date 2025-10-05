@@ -1,3 +1,5 @@
 const allNumbers = /^\d+$/;
 
-module.exports = {allNumbers};
+const phoneNumber = /^\d{10}$/;
+
+module.exports = {allNumbers , phoneNumber};
