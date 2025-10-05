@@ -100,7 +100,6 @@ DROP TABLE IF EXISTS `webPOS_DB`.`mods` ;
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mods` (
   `mod_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NULL,
-  `price` DECIMAL(10,2) NULL DEFAULT 0,
   `category_id` INT NOT NULL,
   `is_available` BIT(1) NULL,
   `tax_id` INT NOT NULL,
@@ -128,7 +127,7 @@ DROP TABLE IF EXISTS `webPOS_DB`.`item_mod` ;
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`item_mod` (
   `item_id` INT NOT NULL,
   `mod_id` INT NOT NULL,
-  `is_default` TINYINT NULL DEFAULT 0,
+  `is_default` BIT(1) NULL DEFAULT 0,
   `max_quantity` INT NULL DEFAULT 1,
   PRIMARY KEY (`item_id`, `mod_id`),
   INDEX `addon_fk_idx` (`mod_id` ASC) VISIBLE,
@@ -298,17 +297,17 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`price_categorie`
+-- Table `webPOS_DB`.`price_category`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`price_categorie` ;
+DROP TABLE IF EXISTS `webPOS_DB`.`price_category` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`price_categorie` (
+CREATE TABLE IF NOT EXISTS `webPOS_DB`.`price_category` (
   `price_id` INT NOT NULL,
-  `categorie_id` INT NOT NULL,
-  PRIMARY KEY (`price_id`, `categorie_id`),
-  INDEX `item_fk_idx` (`categorie_id` ASC) VISIBLE,
-  CONSTRAINT `item_fk`
-    FOREIGN KEY (`categorie_id`)
+  `category_id` INT NOT NULL,
+  PRIMARY KEY (`price_id`, `category_id`),
+  INDEX `item_fk_idx` (`category_id` ASC) VISIBLE,
+  CONSTRAINT `category_fk`
+    FOREIGN KEY (`category_id`)
     REFERENCES `webPOS_DB`.`categories` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
