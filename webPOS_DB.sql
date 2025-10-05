@@ -166,7 +166,8 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`customers` (
   `updated_at` TIMESTAMP NULL,
   `credit` DECIMAL(5,2) NULL DEFAULT 0,
   PRIMARY KEY (`customer_id`),
-  INDEX `phone_index` (`phone` ASC) VISIBLE)
+  INDEX `phone_index` (`phone` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
