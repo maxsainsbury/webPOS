@@ -99,7 +99,6 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
   `item_id` INT NOT NULL AUTO_INCREMENT,
   `item_name` VARCHAR(100) NOT NULL,
   `category_id` INT NOT NULL,
-  `size` VARCHAR(20) NULL,
   `is_available` BIT(1) NULL DEFAULT 1,
   PRIMARY KEY (`item_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
