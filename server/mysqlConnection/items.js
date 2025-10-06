@@ -33,13 +33,28 @@ const selectItemById = async (itemId) => {
 const addItem = async (item) => {
     try {
         const [results, fields] = await pool.query(
-            'INSERT INTO `items` (name, category_id, price, tax_id)' +
-            'VALUES (?, ?, ?, ?, ?)',
-            [item.name, item.categoryId, item.price, item.taxId]
+            `INSERT INTO items (item_name, category_id, is_available, tax_id)
+             VALUES (?, ?, ?, ?)`,
+            [item.name, item.category_id, item.is_available, item.tax_id]
         );
+        return results;
     } catch (error) {
         console.log(error.message);
     }
 }
 
-module.exports = {selectItemsByCategory, selectItemById};
+const updateItem = async (item) => {
+    try {
+        const [results] = await pool.query(
+            `UPDATE items 
+             SET item_name = ?, category_id = ?, is_available = ?, tax_id = ?
+             WHERE item_id = ?`,
+            [item.item_name, item.category_id, item.is_available, item.tax_id, item.item_id]
+        );
+        return results;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+module.exports = {selectItemsByCategory, selectItemById, addItem, updateItem };
