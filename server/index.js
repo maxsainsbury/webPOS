@@ -11,10 +11,13 @@ console.log(app);
 app.use(express.json());
 app.use(cors());
 
-app.get('/items/item/:id', async (req, res) => {
+//get an item by the item id
+app.get('/items/item/:itemId', async (req, res) => {
     try {
-        if(req.params.id.match(allNumbers)) {
-            const results = await selectItemById(req.params.id);
+        //if the itemId is only numbers
+        if(req.params.itemId.match(allNumbers)) {
+            const results = await selectItemById(req.params.itemId);
+            //if there are results
             if(results) {
                 res.send(results);
             }
@@ -30,10 +33,13 @@ app.get('/items/item/:id', async (req, res) => {
     }
 });
 
-app.get('/items/:id', async (req, res) => {
+//get all item by a category id
+app.get('/items/:categoryId', async (req, res) => {
     try {
+        //if id is all numbers
         if(req.params.id.match(allNumbers)) {
-            const results = await selectItemsByCategory(req.params.id);
+            const results = await selectItemsByCategory(req.params.categoryId);
+            //if there are results
             if(results.length) {
                 res.send(results);
             }
@@ -49,10 +55,13 @@ app.get('/items/:id', async (req, res) => {
     }
 });
 
-app.get('/mods/:id', async (req, res) => {
+//get all mods by a category id
+app.get('/mods/:categoryId', async (req, res) => {
     try {
+        //if id is all numbers
         if(req.params.id.match(allNumbers)) {
-            const results = await selectModsByCategory(req.params.id);
+            const results = await selectModsByCategory(req.params.categoryId);
+            //if there are results
             if(results.length) {
                 res.send(results);
             }
@@ -65,9 +74,11 @@ app.get('/mods/:id', async (req, res) => {
     }
 })
 
+//get all categories
 app.get('/categories', async (req, res) => {
     try {
         const results = await selectCategory();
+        //if there are results
         if(results.length) {
             res.send(results);
         }
@@ -79,11 +90,15 @@ app.get('/categories', async (req, res) => {
     }
 });
 
+//get a customer by their phone number
 app.get('/customers/:phoneNumber', async (req, res) => {
     try {
+        //replace anything that isn't a number with nothing
         const phoneNumber = req.params.phoneNumber.replace(/\D/g, '');
+        //check if the phone number is all numbers and 10 or 11 digits long
         if(phoneNumber.match(phoneNumberRegex)) {
             const results = await selectCustomerByPhone(phoneNumber);
+            //if there is results
             if(results) {
                 res.send(results);
             }
@@ -99,10 +114,13 @@ app.get('/customers/:phoneNumber', async (req, res) => {
     }
 });
 
+//add a customer
 app.post('/customers', async (req, res) => {
     try {
         const results = await addCustomer(req.body);
+        //if there are results
         if(results) {
+            //if the customers inf o was changed
             if (results.affectedRows > 0) {
                 res.sendStatus(201);
             } else {
@@ -117,9 +135,11 @@ app.post('/customers', async (req, res) => {
     }
 });
 
+//update a customer
 app.post('/customers/update', async (req, res) => {
     try {
         const results = await updateCustomer(req.body);
+        //if the customer was updated
         if(results.affectedRows > 0) {
             res.sendStatus(201);
         }
