@@ -177,7 +177,7 @@ DROP TABLE IF EXISTS `webPOS_DB`.`orders` ;
 
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `order_id` INT NOT NULL AUTO_INCREMENT,
-  `cusomer_id` INT NULL,
+  `customer_id` INT NULL,
   `user_id` INT NOT NULL,
   `order_number` INT NOT NULL,
   `order_type` ENUM('Dine-in', 'Takeout', 'Delivery') NOT NULL,
@@ -188,15 +188,14 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `subtotal` DECIMAL(8,2) NOT NULL,
   `tax_amount` DECIMAL(6,2) NOT NULL,
   `tip_amount` DECIMAL(6,2) NULL,
-  `total_amount` DECIMAL(8,2) NOT NULL,
-  `payment_statue` ENUM('Pending', 'Paid', 'Refunded') NULL DEFAULT 'Pending',
+  `payment_status` ENUM('Pending', 'Paid', 'Refunded') NULL DEFAULT 'Pending',
   `special_instructions` TEXT NULL,
   PRIMARY KEY (`order_id`),
-  INDEX `customer_fk_idx` (`cusomer_id` ASC) VISIBLE,
+  INDEX `customer_fk_idx` (`customer_id` ASC) VISIBLE,
   INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
   UNIQUE INDEX `order_number_UNIQUE` (`order_number` ASC) VISIBLE,
   CONSTRAINT `customer_id_fk`
-    FOREIGN KEY (`cusomer_id`)
+    FOREIGN KEY (`customer_id`)
     REFERENCES `webPOS_DB`.`customers` (`customer_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
