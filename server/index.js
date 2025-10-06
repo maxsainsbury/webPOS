@@ -37,7 +37,7 @@ app.get('/items/item/:itemId', async (req, res) => {
 app.get('/items/:categoryId', async (req, res) => {
     try {
         //if id is all numbers
-        if(req.params.id.match(allNumbers)) {
+        if(req.params.categoryId.match(allNumbers)) {
             const results = await selectItemsByCategory(req.params.categoryId);
             //if there are results
             if(results.length) {
