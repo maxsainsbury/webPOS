@@ -4,7 +4,7 @@ const {intToBool} = require('../helpers/helperFunctions.js');
 
 const selectItemsByCategory = async (categoryId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             'SELECT * FROM `items` WHERE `category_id`=?',
             [categoryId]
         );
@@ -19,7 +19,7 @@ const selectItemsByCategory = async (categoryId) => {
 
 const selectItemById = async (itemId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             'SELECT * FROM `items` WHERE `item_id`=?',
             [itemId]
         );
@@ -32,10 +32,10 @@ const selectItemById = async (itemId) => {
 
 const addItem = async (item) => {
     try {
-        const [results, fields] = await pool.query(
-            `INSERT INTO items (item_name, category_id, is_available, tax_id)
+        const [results] = await pool.query(
+            `INSERT INTO items (item_name, category_id, is_available)
              VALUES (?, ?, ?, ?)`,
-            [item.name, item.category_id, item.is_available, item.tax_id]
+            [item.name, item.category_id, item.is_available]
         );
         return results;
     } catch (error) {
@@ -47,9 +47,9 @@ const updateItem = async (item) => {
     try {
         const [results] = await pool.query(
             `UPDATE items 
-             SET item_name = ?, category_id = ?, is_available = ?, tax_id = ?
+             SET item_name = ?, category_id = ?, is_available = ?
              WHERE item_id = ?`,
-            [item.item_name, item.category_id, item.is_available, item.tax_id, item.item_id]
+            [item.item_name, item.category_id, item.is_available, item.item_id]
         );
         return results;
     } catch (error) {

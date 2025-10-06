@@ -2,7 +2,7 @@ const pool = require('./connection.js');
 
 const selectTaxRateByCategory = async (categoryId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             `SELECT * FROM tax_rates WHERE category_id = ?`,
             [categoryId]
         );

@@ -2,7 +2,7 @@ const pool = require('connection.js');
 
 const selectEmployeeByPassword = async (password) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             `SELECT * FROM employee WHERE password = ?`,
             [password]
         );
@@ -14,7 +14,7 @@ const selectEmployeeByPassword = async (password) => {
 
 const selectEmployees = async () => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             `SELECT employee_id, f_name, l_name FROM employee`
         );
         return results;
@@ -25,7 +25,7 @@ const selectEmployees = async () => {
 
 const selectEmployeeById = async (employeeId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             `SELECT * FROM employee WHERE employee_id = ?`,
             [employeeId]
         );

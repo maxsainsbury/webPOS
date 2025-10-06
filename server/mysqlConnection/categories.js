@@ -2,7 +2,7 @@ const pool = require('./connection.js');
 
 const selectCategory = async () => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             `SELECT * FROM categories`
         );
         console.log(results);

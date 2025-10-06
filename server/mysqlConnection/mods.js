@@ -3,7 +3,7 @@ const {intToBool} = require("../helpers/helperFunctions");
 
 const selectModsByCategory = async (categoryId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             'SELECT * FROM mods WHERE category_id = ?',
             [categoryId]
         );
@@ -18,7 +18,7 @@ const selectModsByCategory = async (categoryId) => {
 
 const selectModsByItem = async (itemId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             'SELECT * FROM mods WHERE mod_id = (SELECT mod_id FROM item_mod WHERE item_id = ?)',
             [itemId]
         );
@@ -30,7 +30,7 @@ const selectModsByItem = async (itemId) => {
 
 const selectModsByItemDefault = async (itemId) => {
     try {
-        const [results, fields] = await pool.query(
+        const [results] = await pool.query(
             'SELECT * FROM mods WHERE mod_id = (SELECT mod_id FROM item_mod WHERE item_id = ? AND is_default = 1)',
             [itemId]
         )
