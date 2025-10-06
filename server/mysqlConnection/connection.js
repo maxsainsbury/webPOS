@@ -1,11 +1,17 @@
 const mysql = require('mysql2/promise');
+const config = require('../config.json');
+const database = config.database;
+
+//extract data from config file
+const {host, port, user, password, name} = database;
 
 //create a pool connection to the mySQL server
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '1234',
-    database: 'webPOS_DB',
+    host: host,
+    port: port,
+    user: user,
+    password: password,
+    database: name,
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10,
