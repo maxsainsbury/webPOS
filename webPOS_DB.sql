@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
   `category_id` INT NOT NULL,
   `size` VARCHAR(20) NULL,
   `is_available` BIT(1) NULL DEFAULT 1,
-  `tax_id` INT NOT NULL,
   PRIMARY KEY (`item_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_item_fk`
@@ -80,10 +79,9 @@ DROP TABLE IF EXISTS `webPOS_DB`.`mods` ;
 
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mods` (
   `mod_id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NULL,
+  `mod_name` VARCHAR(50) NULL,
   `category_id` INT NOT NULL,
   `is_available` BIT(1) NULL,
-  `tax_id` INT NOT NULL,
   PRIMARY KEY (`mod_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_mod_fk`
