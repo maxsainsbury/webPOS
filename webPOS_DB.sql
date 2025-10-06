@@ -39,6 +39,31 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `webPOS_DB`.`tax_rates`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `webPOS_DB`.`tax_rates` ;
+
+CREATE TABLE IF NOT EXISTS `webPOS_DB`.`tax_rates` (
+  `tax_id` INT NOT NULL AUTO_INCREMENT,
+  `tax_name` VARCHAR(45) NOT NULL,
+  `tax_rate` DECIMAL(5,4) NOT NULL,
+  PRIMARY KEY (`tax_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `webPOS_DB`.`prices`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `webPOS_DB`.`prices` ;
+
+CREATE TABLE IF NOT EXISTS `webPOS_DB`.`prices` (
+  `price_id` INT NOT NULL AUTO_INCREMENT,
+  `price` DECIMAL(6,2) NULL,
+  PRIMARY KEY (`price_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `webPOS_DB`.`categories`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `webPOS_DB`.`categories` ;
@@ -46,8 +71,22 @@ DROP TABLE IF EXISTS `webPOS_DB`.`categories` ;
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`categories` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(50) NOT NULL,
+  `tax_id` INT NULL,
+  `price_id` INT NULL,
   PRIMARY KEY (`category_id`),
-  UNIQUE INDEX `name_UNIQUE` (`category_name` ASC) VISIBLE)
+  UNIQUE INDEX `name_UNIQUE` (`category_name` ASC) VISIBLE,
+  UNIQUE INDEX `tax_id_UNIQUE` (`tax_id` ASC) VISIBLE,
+  UNIQUE INDEX `price_id_UNIQUE` (`price_id` ASC) VISIBLE,
+  CONSTRAINT `category_tax_fk`
+    FOREIGN KEY (`tax_id`)
+    REFERENCES `webPOS_DB`.`tax_rates` (`tax_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `category_price_fk`
+    FOREIGN KEY (`price_id`)
+    REFERENCES `webPOS_DB`.`prices` (`price_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -251,45 +290,6 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`payments` (
   CONSTRAINT `order_id_fk`
     FOREIGN KEY (`order_id`)
     REFERENCES `webPOS_DB`.`orders` (`order_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `webPOS_DB`.`tax_rates`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`tax_rates` ;
-
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`tax_rates` (
-  `tax_id` INT NOT NULL AUTO_INCREMENT,
-  `tax_name` VARCHAR(45) NOT NULL,
-  `tax_rate` DECIMAL(5,4) NOT NULL,
-  `category_id` INT NOT NULL,
-  PRIMARY KEY (`tax_id`),
-  UNIQUE INDEX `category_id_UNIQUE` (`category_id` ASC) VISIBLE,
-  CONSTRAINT `tax_categorie_fk`
-    FOREIGN KEY (`category_id`)
-    REFERENCES `webPOS_DB`.`categories` (`category_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `webPOS_DB`.`prices`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`prices` ;
-
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`prices` (
-  `price_id` INT NOT NULL AUTO_INCREMENT,
-  `price` DECIMAL(6,2) NULL,
-  `category_id` INT NOT NULL,
-  PRIMARY KEY (`price_id`),
-  UNIQUE INDEX `category_id_UNIQUE` (`category_id` ASC) VISIBLE,
-  CONSTRAINT `price_categorie_fk`
-    FOREIGN KEY (`category_id`)
-    REFERENCES `webPOS_DB`.`categories` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
