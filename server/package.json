@@ -17,6 +17,7 @@
   "exports": {
     "./regex": "./regex/regex.js",
     "./helpers": "./helpers/helperFunctions.js",
-    "./mysqlConnection" : "./mysqlConnection/*.js"
+    "./mysqlConnection" : "./mysqlConnection/*.js",
+    ".": "./config.json"
   }
 }
