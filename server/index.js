@@ -15,7 +15,6 @@ app.get('/items/item/:id', async (req, res) => {
     try {
         if(req.params.id.match(allNumbers)) {
             const results = await selectItemById(req.params.id);
-            console.log(results);
             if(results) {
                 res.send(results);
             }
@@ -35,7 +34,6 @@ app.get('/items/:id', async (req, res) => {
     try {
         if(req.params.id.match(allNumbers)) {
             const results = await selectItemsByCategory(req.params.id);
-            console.log(results);
             if(results.length) {
                 res.send(results);
             }
@@ -55,7 +53,6 @@ app.get('/mods/:id', async (req, res) => {
     try {
         if(req.params.id.match(allNumbers)) {
             const results = await selectModsByCategory(req.params.id);
-            console.log(results);
             if(results.length) {
                 res.send(results);
             }
@@ -71,7 +68,6 @@ app.get('/mods/:id', async (req, res) => {
 app.get('/categories', async (req, res) => {
     try {
         const results = await selectCategory();
-        console.log(results);
         if(results.length) {
             res.send(results);
         }
@@ -85,9 +81,7 @@ app.get('/categories', async (req, res) => {
 
 app.get('/customers/:phoneNumber', async (req, res) => {
     try {
-        console.log(req.params.phoneNumber);
         const phoneNumber = req.params.phoneNumber.replace(/\D/g, '');
-        console.log(phoneNumber);
         if(phoneNumber.match(phoneNumberRegex)) {
             const results = await selectCustomerByPhone(phoneNumber);
             if(results) {
@@ -108,7 +102,6 @@ app.get('/customers/:phoneNumber', async (req, res) => {
 app.post('/customers', async (req, res) => {
     try {
         const results = await addCustomer(req.body);
-        console.log(results);
         if(results) {
             if (results.affectedRows > 0) {
                 res.sendStatus(201);
