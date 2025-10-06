@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 
+//create a pool connection to the mySQL server
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
@@ -14,4 +15,5 @@ const pool = mysql.createPool({
     keepAliveInitialDelay: 0,
 });
 
+//export for use throughout all mySQL files
 module.exports = pool;

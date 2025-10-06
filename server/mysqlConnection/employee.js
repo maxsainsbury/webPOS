@@ -1,5 +1,6 @@
 const pool = require('connection.js');
 
+//function to select an employee by their password
 const selectEmployeeByPassword = async (password) => {
     try {
         const [results] = await pool.query(
@@ -12,6 +13,7 @@ const selectEmployeeByPassword = async (password) => {
     }
 }
 
+//function to select all employees
 const selectEmployees = async () => {
     try {
         const [results] = await pool.query(
@@ -23,6 +25,7 @@ const selectEmployees = async () => {
     }
 }
 
+//function to select an employee by their employee id
 const selectEmployeeById = async (employeeId) => {
     try {
         const [results] = await pool.query(
@@ -35,6 +38,7 @@ const selectEmployeeById = async (employeeId) => {
     }
 }
 
+//function to add and employee to the database
 const addEmployee = async (employee) => {
     try {
         const [results] = await pool.query(
@@ -48,6 +52,7 @@ const addEmployee = async (employee) => {
     }
 }
 
+//function to update an employees info in the database
 const updateEmployee = async (employee) => {
     try {
         const [results] = await pool.query(
@@ -62,6 +67,7 @@ const updateEmployee = async (employee) => {
     }
 }
 
+//function to update an employees password in the database
 const updateEmployeePassword = async (employee) => {
     try {
         const [results] = await pool.query(
@@ -76,4 +82,5 @@ const updateEmployeePassword = async (employee) => {
     }
 }
 
+//export all functions
 module.exports = { selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmployee, updateEmployee, updateEmployeePassword };2

@@ -1,5 +1,6 @@
 const pool = require('./connection.js');
 
+//function to search for a customer by their phone number
 const selectCustomerByPhone = async (phoneNumber) => {
     try {
         const [results] = await pool.query(
@@ -12,6 +13,7 @@ const selectCustomerByPhone = async (phoneNumber) => {
     }
 }
 
+//function to add a customer to the database
 const addCustomer = async (customer) => {
     try {
         customer.postal_code = customer.postal_code.replaceAll(' ', '');
@@ -27,6 +29,7 @@ const addCustomer = async (customer) => {
     }
 }
 
+//function to update a customers into in the database
 const updateCustomer = async (customer) => {
     try {
         customer.postal_code = customer.postal_code.replaceAll(' ', '');
@@ -42,4 +45,5 @@ const updateCustomer = async (customer) => {
     }
 }
 
+//export all functions
 module.exports = { selectCustomerByPhone, addCustomer , updateCustomer };

@@ -1,7 +1,7 @@
 const pool = require('./connection.js');
-const {intToBool} = require('../helpers/helperFunctions.js');
+const {intToBool, boolToInt} = require('../helpers/helperFunctions.js');
 
-
+//function to select all items related by a category
 const selectItemsByCategory = async (categoryId) => {
     try {
         const [results] = await pool.query(
@@ -17,6 +17,7 @@ const selectItemsByCategory = async (categoryId) => {
     }
 }
 
+//function to select an item by the item id
 const selectItemById = async (itemId) => {
     try {
         const [results] = await pool.query(
@@ -30,8 +31,10 @@ const selectItemById = async (itemId) => {
     }
 }
 
+//function to add an item to the database
 const addItem = async (item) => {
     try {
+        item.is_available = boolToInt(item.is_available);
         const [results] = await pool.query(
             `INSERT INTO items (item_name, category_id, is_available)
              VALUES (?, ?, ?)`,
@@ -43,8 +46,10 @@ const addItem = async (item) => {
     }
 }
 
+//function to update a item in the database
 const updateItem = async (item) => {
     try {
+        item.is_available = boolToInt(item.is_available);
         const [results] = await pool.query(
             `UPDATE items 
              SET item_name = ?, category_id = ?, is_available = ?
@@ -57,4 +62,5 @@ const updateItem = async (item) => {
     }
 }
 
+//export all functions
 module.exports = {selectItemsByCategory, selectItemById, addItem, updateItem };

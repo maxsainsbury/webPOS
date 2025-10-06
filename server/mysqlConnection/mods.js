@@ -1,12 +1,14 @@
 const pool = require('./connection.js');
-const {intToBool} = require("../helpers/helperFunctions");
+const {intToBool, boolToInt} = require("../helpers/helperFunctions");
 
+//function to search for mods by related category
 const selectModsByCategory = async (categoryId) => {
     try {
         const [results] = await pool.query(
             'SELECT * FROM mods WHERE category_id = ?',
             [categoryId]
         );
+        //for all returned mods change is_availabe variable from tinyint to boolean
         for(let i = 0; i < results.length; i++) {
             results[i].is_available = intToBool(results[i].is_available[0]);
         }
@@ -16,32 +18,45 @@ const selectModsByCategory = async (categoryId) => {
     }
 }
 
+//function to search for mods by related item
 const selectModsByItem = async (itemId) => {
     try {
         const [results] = await pool.query(
             'SELECT * FROM mods WHERE mod_id = (SELECT mod_id FROM item_mod WHERE item_id = ?)',
             [itemId]
         );
+        //for all returned mods change is_availabe variable from tinyint to boolean
+        for(let i = 0; i < results.length; i++) {
+            results[i].is_available = intToBool(results[i].is_available[0]);
+        }
         return results;
     } catch (error) {
         console.log(error.message);
     }
 }
 
+//function to search for mods by if their default on the item
 const selectModsByItemDefault = async (itemId) => {
     try {
         const [results] = await pool.query(
             'SELECT * FROM mods WHERE mod_id = (SELECT mod_id FROM item_mod WHERE item_id = ? AND is_default = 1)',
             [itemId]
         )
+        //for all returned mods change is_availabe variable from tinyint to boolean
+        for(let i = 0; i < results.length; i++) {
+            results[i].is_available = intToBool(results[i].is_available[0]);
+        }
         return results;
     } catch (error) {
         console.log(error.message);
     }
 }
 
+//function to add a mod to the database
 const addMod = async (mod) => {
     try {
+        //change is_available variable into an integer
+        mod.is_available = boolToInt(mod.is_available);
         const [results] = await pool.query(
             `INSERT INTO mods 
              (mod_name, category_id, is_available)
@@ -54,8 +69,11 @@ const addMod = async (mod) => {
     }
 }
 
+//function to update a mod in the database
 const updateMod = async (mod) => {
     try {
+        //change is_available variable into an integer
+        mod.is_available = boolToInt(mod.is_available);
         const [results] = await pool.query(
             `UPDATE mods
             SET mod_name = ?, category_id = ?, is_available = ? 
