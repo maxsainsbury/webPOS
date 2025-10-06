@@ -34,7 +34,7 @@ const addItem = async (item) => {
     try {
         const [results] = await pool.query(
             `INSERT INTO items (item_name, category_id, is_available)
-             VALUES (?, ?, ?, ?)`,
+             VALUES (?, ?, ?)`,
             [item.name, item.category_id, item.is_available]
         );
         return results;

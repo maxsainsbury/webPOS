@@ -6,7 +6,7 @@ const selectEmployeeByPassword = async (password) => {
             `SELECT * FROM employee WHERE password = ?`,
             [password]
         );
-        return resuls[0];
+        return results[0];
     } catch (error) {
         console.log(error.message);
     }
@@ -56,7 +56,7 @@ const updateEmployee = async (employee) => {
             WHERE employee_id = ?`,
             [employee.role, employee.position, employee.hourly_rate, employee.f_name, employee.l_name, employee.email, employee.hire_date, employee.phone, employee.employee_id]
         );
-        return resuls;
+        return results;
     } catch (error) {
         console.log(error.message);
     }
