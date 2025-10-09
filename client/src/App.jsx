@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import TouchBtn from './assets/components/touchBtn/TouchBtn';
+import LoginPanel from "./components/LoginPanel/LoginPanel.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <TouchBtn name="Max Sainsbury" width="10em" height="5em" />
+        <LoginPanel width="20em" height="60em" />
     </>
   )
 }

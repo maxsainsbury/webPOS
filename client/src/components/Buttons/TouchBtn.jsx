@@ -1,4 +1,4 @@
-import './touchBtn.css';
+import './Button.css';
 
 const TouchBtn = (props) => {
     const style = {
@@ -7,8 +7,8 @@ const TouchBtn = (props) => {
     }
 
     return (
-        <div className="touchBtn" style={style}>
-            <p className="touchBtnTitle">{props.name}</p>
+        <div className="btn" id={props.id} style={style}>
+            <p className="btnTitle">{props.name}</p>
         </div>
     );
 }

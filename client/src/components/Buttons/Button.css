@@ -1,4 +1,4 @@
-.touchBtn {
+.btn {
     cursor: pointer;
     background-color: #1a1a1a;
     border-color: #000000;
@@ -7,15 +7,15 @@
     border-radius: 10px;
 }
 
-.touchBtn:hover {
+.btn:hover {
     background-color: #2a2a2a;
 }
 
-.touchBtn:active {
+.btn:active {
     background-color: #000000;
 }
 
-.touchBtnTitle {
+.btnTitle {
     height: 100%;
     width: 100%;
     padding: 0;
@@ -27,4 +27,8 @@
     color: #fff;
     font-size: 1.5em;
     font-weight: 500;
+}
+
+#round {
+    border-radius: 50%;
 }
