@@ -10,6 +10,7 @@ const {selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmploye
     updateEmployeePassword
 } = require("./mysqlConnection/employee");
 const {selectCustomerById} = require("./mysqlConnection/customers");
+const {addCategory, updateCategory} = require("./mysqlConnection/categories");
 
 console.log(app);
 app.use(express.json());
@@ -129,6 +130,46 @@ app.get('/category', async (req, res) => {
         console.log(error.message);
     }
 });
+
+//add a category
+app.post('/category/add', async (req, res) => {
+    try {
+        const results = await addCategory(req.body);
+        if(results) {
+            if(results.affectedRows > 0) {
+                res.status(201).send();
+            }
+            else {
+                res.status(400).json({ error: 'Category not added' });
+            }
+        }
+        else {
+            res.status(400).json({ error: 'Category not added' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//update a category
+app.post('/category/update', async (req, res) => {
+    try {
+        const results = await updateCategory(req.body);
+        if(results) {
+            if(results.affectedRows > 0) {
+                res.status(201).send();
+            }
+            else {
+                res.status(400).json({ error: 'Category not added' });
+            }
+        }
+        else {
+            res.status(400).json({ error: 'Category not added' });
+        }
+    } catch(error) {
+        console.log(error.message);
+    }
+})
 
 //get a customer by their phone number
 app.get('/customers/phone/:phoneNumber', async (req, res) => {
