@@ -6,13 +6,17 @@ const { selectModsByCategory } = require('./mysqlConnection/mods.js');
 const { selectCategory } = require('./mysqlConnection/categories.js');
 const { selectCustomerByPhone, addCustomer, updateCustomer } = require('./mysqlConnection/customers.js');
 const { allNumbers, phoneNumberRegex } = require('./regex/regex.js');
+const {addItem, updateItem} = require("./mysqlConnection/items");
+const {selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmployee, updateEmployee,
+    updateEmployeePassword
+} = require("./mysqlConnection/employee");
 
 console.log(app);
 app.use(express.json());
 app.use(cors());
 
 //get an item by the item id
-app.get('/items/item/:itemId', async (req, res) => {
+app.get('/items/:itemId', async (req, res) => {
     try {
         //if the itemId is only numbers
         if(req.params.itemId.match(allNumbers)) {
@@ -22,11 +26,11 @@ app.get('/items/item/:itemId', async (req, res) => {
                 res.send(results);
             }
             else {
-                res.sendStatus(404).json({error: 'Not Found'});
+                res.status(404).json({error: 'Not Found'});
             }
         }
         else {
-            res.sendStatus(404).json({ error: 'Not Found' });
+            res.status(404).json({ error: 'Not Found' });
         }
     } catch (error) {
         console.log(error.message);
@@ -34,7 +38,7 @@ app.get('/items/item/:itemId', async (req, res) => {
 });
 
 //get all item by a category id
-app.get('/items/:categoryId', async (req, res) => {
+app.get('/category/:categoryId/items', async (req, res) => {
     try {
         //if id is all numbers
         if(req.params.categoryId.match(allNumbers)) {
@@ -44,19 +48,58 @@ app.get('/items/:categoryId', async (req, res) => {
                 res.send(results);
             }
             else {
-                res.sendStatus(404).json({ error: 'Not Found' });
+                res.status(404).json({ error: 'Not Found' });
             }
         }
         else {
-            res.sendStatus(404).json({ error: 'Not Found' });
+            res.status(404).json({ error: 'Not Found' });
         }
     } catch (error) {
         console.log(error.message);
     }
 });
 
+//add an item
+app.post('/items/add', async (req, res) => {
+    try {
+        const results = await addItem(req.body);
+        if(results) {
+            if(results.affectedRows) {
+                res.status(200).json(results);
+            }
+            else {
+                res.status(400).json({ error: 'Item not added' });
+            }
+        }
+        else {
+            res.status(400).json({ error: 'Item not added' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//update an item
+app.post('/items/update', async (req, res) => {
+    try {
+        const results = await updateItem(req.body);
+        //if the customer was updated
+        if(results.affectedRows > 0) {
+            res.status(201);
+        }
+        else {
+            res.status(400).json({error: 'Could not update Item'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+})
+
+//update an item
+app.post('/items', async (req, res) => {})
+
 //get all mods by a category id
-app.get('/mods/:categoryId', async (req, res) => {
+app.get('/category/:categoryId/mods', async (req, res) => {
     try {
         //if id is all numbers
         if(req.params.id.match(allNumbers)) {
@@ -66,7 +109,7 @@ app.get('/mods/:categoryId', async (req, res) => {
                 res.send(results);
             }
             else {
-                res.sendStatus(404).json({ error: 'Not Found' });
+                res.status(404).json({ error: 'Not Found' });
             }
         }
     } catch (error) {
@@ -75,7 +118,7 @@ app.get('/mods/:categoryId', async (req, res) => {
 })
 
 //get all categories
-app.get('/categories', async (req, res) => {
+app.get('/category', async (req, res) => {
     try {
         const results = await selectCategory();
         //if there are results
@@ -83,7 +126,7 @@ app.get('/categories', async (req, res) => {
             res.send(results);
         }
         else {
-            res.sendStatus(404).json({ error: 'Not Found' });
+            res.status(404).json({ error: 'Not Found' });
         }
     } catch (error) {
         console.log(error.message);
@@ -103,11 +146,11 @@ app.get('/customers/:phoneNumber', async (req, res) => {
                 res.send(results);
             }
             else {
-                res.sendStatus(404).json({ error: 'Not Found' });
+                res.status(404).json({ error: 'Not Found' });
             }
         }
         else {
-            res.sendStatus(404).json({ error: 'Not Found' });
+            res.status(404).json({ error: 'Not Found' });
         }
     } catch (error) {
         console.log(error.message);
@@ -115,20 +158,20 @@ app.get('/customers/:phoneNumber', async (req, res) => {
 });
 
 //add a customer
-app.post('/customers', async (req, res) => {
+app.post('/customers/add', async (req, res) => {
     try {
         const results = await addCustomer(req.body);
         //if there are results
         if(results) {
             //if the customers inf o was changed
             if (results.affectedRows > 0) {
-                res.sendStatus(201);
+                res.status(201);
             } else {
-                res.sendStatus(400).json({error: 'Could not add Customers'});
+                res.status(400).json({error: 'Could not add Customers'});
             }
         }
         else {
-            res.sendStatus(400).json({error: 'Could not add Customers'});
+            res.status(400).json({error: 'Could not add Customers'});
         }
     } catch (error) {
         console.log(error.message);
@@ -141,10 +184,114 @@ app.post('/customers/update', async (req, res) => {
         const results = await updateCustomer(req.body);
         //if the customer was updated
         if(results.affectedRows > 0) {
-            res.sendStatus(201);
+            res.status(201);
         }
         else {
-            res.sendStatus(400).json({error: 'Could not update Customers'});
+            res.status(400).json({error: 'Could not update Customers'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//employee login
+app.get('/employees/login', async (req, res) => {
+    try {
+        const results = await selectEmployeeByPassword(req.body);
+        if(results) {
+            res.send(results);
+        }
+        else {
+            res.status(404).json({ error: 'Employee Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//get all employees
+app.get('/employees', async (req, res) => {
+    try {
+        const results = await selectEmployees();
+        if(results.length) {
+            res.send(results);
+        }
+        else {
+            res.status(404).json({ error: 'Employees Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//get employee by id
+app.get('/employees/:employeeId', async (req, res) => {
+    try {
+        const [results] = await selectEmployeeById(req.params.employeeId);
+        if(results) {
+            res.send(results);
+        }
+        else {
+            res.status(404).json({ error: 'Employee Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//add an employee
+app.post('/employees/add', async (req, res) => {
+    try {
+        const results = await addEmployee(req.body);
+        if(results) {
+            if (results.affectedRows > 0) {
+                res.status(201);
+            }
+            else {
+                res.status(400).json({error: 'Could not add Employee'});
+            }
+        }
+        else {
+            res.status(400).json({error: 'Could not add Employee'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//update an employee
+app.post('/employees/update', async (req, res) => {
+    try {
+        const [results] = await updateEmployee(req.body);
+        if(results) {
+            if (results.affectedRows > 0) {
+                res.status(201);
+            }
+            else {
+                res.status(400).json({error: 'Could not update Employee'});
+            }
+        }
+        else {
+            res.status(400).json({error: 'Could not update Employee'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+app.post('/employees/update/password', async (req, res) => {
+    try {
+        const results = await updateEmployeePassword(req.body);
+        if(results) {
+            if (results.affectedRows > 0) {
+                res.status(201);
+            }
+            else {
+                res.status(400).json({error: 'Could not update Employee'});
+            }
+        }
+        else {
+            res.status(400).json({error: 'Could not update Employee'});
         }
     } catch (error) {
         console.log(error.message);
