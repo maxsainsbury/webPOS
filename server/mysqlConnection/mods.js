@@ -52,6 +52,23 @@ const selectModsByItemDefault = async (itemId) => {
     }
 }
 
+//function to search for mods by mod id
+const selectModsById = async (modId) => {
+    try {
+        const [results] = await pool.query(
+            `SELECT * 
+             FROM mods INNER JOIN categories c USING(category_id)
+             INNER JOIN tax_rates USING(tax_id)
+             INNER JOIN prices p ON(c.price_id = p.price_id)
+             WHERE mod_id = ?`,
+        );
+        results[0].is_available = intToBool(results[0].is_available[0]);
+        return results[0];
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 //function to add a mod to the database
 const addMod = async (mod) => {
     try {
@@ -86,4 +103,4 @@ const updateMod = async (mod) => {
     }
 }
 
-module.exports = { selectModsByCategory, selectModsByItem, selectModsByItemDefault, addMod, updateMod };
+module.exports = { selectModsByCategory, selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod };
