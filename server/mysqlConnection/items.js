@@ -21,11 +21,15 @@ const selectItemsByCategory = async (categoryId) => {
 const selectItemById = async (itemId) => {
     try {
         const [results] = await pool.query(
-            'SELECT * FROM `items` WHERE `item_id`=?',
+            `SELECT *
+             FROM items i INNER JOIN categories c USING(category_id)
+             INNER JOIN tax_rates t ON(c.tax_id = t.tax_id)
+             INNER JOIN prices p ON(c.price_id = p.price_id)
+             WHERE item_id = 2`,
             [itemId]
         );
         results[0].is_available = intToBool(results[0].is_available[0]);
-        return results[0];
+        return results;
     } catch (error) {
         console.log(error.message);
     }
