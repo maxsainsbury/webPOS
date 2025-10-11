@@ -75,8 +75,6 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`categories` (
   `price_id` INT NULL,
   PRIMARY KEY (`category_id`),
   UNIQUE INDEX `name_UNIQUE` (`category_name` ASC) VISIBLE,
-  UNIQUE INDEX `tax_id_UNIQUE` (`tax_id` ASC) VISIBLE,
-  UNIQUE INDEX `price_id_UNIQUE` (`price_id` ASC) VISIBLE,
   CONSTRAINT `category_tax_fk`
     FOREIGN KEY (`tax_id`)
     REFERENCES `webPOS_DB`.`tax_rates` (`tax_id`)
