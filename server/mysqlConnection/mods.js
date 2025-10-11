@@ -61,6 +61,7 @@ const selectModsById = async (modId) => {
              INNER JOIN tax_rates USING(tax_id)
              INNER JOIN prices p ON(c.price_id = p.price_id)
              WHERE mod_id = ?`,
+            [modId]
         );
         results[0].is_available = intToBool(results[0].is_available[0]);
         return results[0];
