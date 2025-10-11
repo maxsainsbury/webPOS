@@ -13,4 +13,32 @@ const selectTaxRateByCategory = async (categoryId) => {
     }
 }
 
-module.exports = { selectTaxRateByCategory };
+const addTaxRate = async (taxRate) => {
+    try {
+        const [results] = await pool.query(
+            `INSERT INTO tax_rates
+            (tax_name, tax_rate)
+            VALUES (?, ?)`,
+            [taxRate.tax_name, taxRate.tax_rate]
+        );
+        return results;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const updateTaxRate = async (taxRate) => {
+    try {
+        const [results] = await pool.query(
+            `UPDATE tax_rates
+            SET tax_name = ?, tax_rate = ? 
+            WHERE tax_id = ?`,
+            [taxRate.tax_name, taxRate.tax_rate, taxRate.tax_id]
+        );
+        return results;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+module.exports = { selectTaxRateByCategory, addTaxRate, updateTaxRate };
