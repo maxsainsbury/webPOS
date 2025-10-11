@@ -13,6 +13,18 @@ const selectCustomerByPhone = async (phoneNumber) => {
     }
 }
 
+const selectCustomerById = async (customerId) => {
+    try {
+        const [results] = await pool.query(
+            `SELECT * FROM customers WHERE customer_id = ?`,
+            [customerId]
+        );
+        return results[0];
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 //function to add a customer to the database
 const addCustomer = async (customer) => {
     try {
@@ -46,4 +58,4 @@ const updateCustomer = async (customer) => {
 }
 
 //export all functions
-module.exports = { selectCustomerByPhone, addCustomer , updateCustomer };
+module.exports = { selectCustomerByPhone, selectCustomerById, addCustomer , updateCustomer };

@@ -1,15 +1,15 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { selectItemsByCategory, selectItemById } = require('./mysqlConnection/items.js');
+const { selectItemsByCategory, selectItemById, addItem, updateItem } = require('./mysqlConnection/items.js');
 const { selectModsByCategory } = require('./mysqlConnection/mods.js');
 const { selectCategory } = require('./mysqlConnection/categories.js');
 const { selectCustomerByPhone, addCustomer, updateCustomer } = require('./mysqlConnection/customers.js');
 const { allNumbers, phoneNumberRegex } = require('./regex/regex.js');
-const {addItem, updateItem} = require("./mysqlConnection/items");
 const {selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmployee, updateEmployee,
     updateEmployeePassword
 } = require("./mysqlConnection/employee");
+const {selectCustomerById} = require("./mysqlConnection/customers");
 
 console.log(app);
 app.use(express.json());
@@ -23,7 +23,7 @@ app.get('/items/:itemId', async (req, res) => {
             const results = await selectItemById(req.params.itemId);
             //if there are results
             if(results) {
-                res.send(results);
+                res.status(200).json(results);
             }
             else {
                 res.status(404).json({error: 'Not Found'});
@@ -45,7 +45,7 @@ app.get('/category/:categoryId/items', async (req, res) => {
             const results = await selectItemsByCategory(req.params.categoryId);
             //if there are results
             if(results.length) {
-                res.send(results);
+                res.status(200).json(results);
             }
             else {
                 res.status(404).json({ error: 'Not Found' });
@@ -65,7 +65,7 @@ app.post('/items/add', async (req, res) => {
         const results = await addItem(req.body);
         if(results) {
             if(results.affectedRows) {
-                res.status(200).json(results);
+                res.status(201).json(results);
             }
             else {
                 res.status(400).json({ error: 'Item not added' });
@@ -85,7 +85,7 @@ app.post('/items/update', async (req, res) => {
         const results = await updateItem(req.body);
         //if the customer was updated
         if(results.affectedRows > 0) {
-            res.status(201);
+            res.status(200).send();
         }
         else {
             res.status(400).json({error: 'Could not update Item'});
@@ -95,9 +95,6 @@ app.post('/items/update', async (req, res) => {
     }
 })
 
-//update an item
-app.post('/items', async (req, res) => {})
-
 //get all mods by a category id
 app.get('/category/:categoryId/mods', async (req, res) => {
     try {
@@ -106,7 +103,7 @@ app.get('/category/:categoryId/mods', async (req, res) => {
             const results = await selectModsByCategory(req.params.categoryId);
             //if there are results
             if(results.length) {
-                res.send(results);
+                res.status(200).json(results);
             }
             else {
                 res.status(404).json({ error: 'Not Found' });
@@ -123,7 +120,7 @@ app.get('/category', async (req, res) => {
         const results = await selectCategory();
         //if there are results
         if(results.length) {
-            res.send(results);
+            res.status(200).send(results);
         }
         else {
             res.status(404).json({ error: 'Not Found' });
@@ -134,7 +131,7 @@ app.get('/category', async (req, res) => {
 });
 
 //get a customer by their phone number
-app.get('/customers/:phoneNumber', async (req, res) => {
+app.get('/customers/phone/:phoneNumber', async (req, res) => {
     try {
         //replace anything that isn't a number with nothing
         const phoneNumber = req.params.phoneNumber.replace(/\D/g, '');
@@ -143,7 +140,7 @@ app.get('/customers/:phoneNumber', async (req, res) => {
             const results = await selectCustomerByPhone(phoneNumber);
             //if there is results
             if(results) {
-                res.send(results);
+                res.status(200).json(results);
             }
             else {
                 res.status(404).json({ error: 'Not Found' });
@@ -151,6 +148,20 @@ app.get('/customers/:phoneNumber', async (req, res) => {
         }
         else {
             res.status(404).json({ error: 'Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//get a customer by their id
+app.get('/customers/:customerId', async (req, res) => {
+    try {
+        const results = await selectCustomerById(req.params.customerId);
+        if (results) {
+            res.status(200).send(results);
+        } else {
+            res.status(404).json({error: 'Not Found'});
         }
     } catch (error) {
         console.log(error.message);
@@ -165,7 +176,7 @@ app.post('/customers/add', async (req, res) => {
         if(results) {
             //if the customers inf o was changed
             if (results.affectedRows > 0) {
-                res.status(201);
+                res.status(201).send();
             } else {
                 res.status(400).json({error: 'Could not add Customers'});
             }
@@ -184,7 +195,7 @@ app.post('/customers/update', async (req, res) => {
         const results = await updateCustomer(req.body);
         //if the customer was updated
         if(results.affectedRows > 0) {
-            res.status(201);
+            res.status(200).send();
         }
         else {
             res.status(400).json({error: 'Could not update Customers'});
@@ -199,7 +210,7 @@ app.get('/employees/login', async (req, res) => {
     try {
         const results = await selectEmployeeByPassword(req.body);
         if(results) {
-            res.send(results);
+            res.status(200).json(results);
         }
         else {
             res.status(404).json({ error: 'Employee Not Found' });
@@ -214,7 +225,7 @@ app.get('/employees', async (req, res) => {
     try {
         const results = await selectEmployees();
         if(results.length) {
-            res.send(results);
+            res.status(200).json(results);
         }
         else {
             res.status(404).json({ error: 'Employees Not Found' });
@@ -229,7 +240,7 @@ app.get('/employees/:employeeId', async (req, res) => {
     try {
         const [results] = await selectEmployeeById(req.params.employeeId);
         if(results) {
-            res.send(results);
+            res.status(200).json(results);
         }
         else {
             res.status(404).json({ error: 'Employee Not Found' });
@@ -245,7 +256,7 @@ app.post('/employees/add', async (req, res) => {
         const results = await addEmployee(req.body);
         if(results) {
             if (results.affectedRows > 0) {
-                res.status(201);
+                res.status(201).send();
             }
             else {
                 res.status(400).json({error: 'Could not add Employee'});
@@ -265,7 +276,7 @@ app.post('/employees/update', async (req, res) => {
         const [results] = await updateEmployee(req.body);
         if(results) {
             if (results.affectedRows > 0) {
-                res.status(201);
+                res.status(201).send();
             }
             else {
                 res.status(400).json({error: 'Could not update Employee'});
@@ -284,7 +295,7 @@ app.post('/employees/update/password', async (req, res) => {
         const results = await updateEmployeePassword(req.body);
         if(results) {
             if (results.affectedRows > 0) {
-                res.status(201);
+                res.status(201).send();
             }
             else {
                 res.status(400).json({error: 'Could not update Employee'});
