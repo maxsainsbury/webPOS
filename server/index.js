@@ -11,6 +11,7 @@ const {selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmploye
 } = require("./mysqlConnection/employee");
 const {selectCustomerById} = require("./mysqlConnection/customers");
 const {addCategory, updateCategory} = require("./mysqlConnection/categories");
+const {selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod} = require("./mysqlConnection/mods");
 
 console.log(app);
 app.use(express.json());
@@ -94,13 +95,13 @@ app.post('/items/update', async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-})
+});
 
 //get all mods by a category id
 app.get('/category/:categoryId/mods', async (req, res) => {
     try {
         //if id is all numbers
-        if(req.params.id.match(allNumbers)) {
+        if(req.params.categoryId.match(allNumbers)) {
             const results = await selectModsByCategory(req.params.categoryId);
             //if there are results
             if(results.length) {
@@ -113,7 +114,67 @@ app.get('/category/:categoryId/mods', async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-})
+});
+
+//get mods that are default to an item
+app.get('/mods/item/:itemId/default', async (req, res) => {
+    try {
+        const results = await selectModsByItemDefault(req.params.itemId);
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//get mod by mod id
+app.get('/mods/:modId', async (req, res) => {
+    try {
+        const results = await selectModsById(req.params.modId);
+        if (results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//add a mod
+app.post('/mods/add', async (req, res) => {
+    try {
+        const results = await addMod(req.body);
+        if(results && results.affectedRows > 0) {
+            res.status(201).send();
+        }
+        else {
+            res.status(400).json({ error: 'Mod not added' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+//update a mod
+app.post('/mods/update', async (req, res) => {
+    try {
+        const results = await updateMod(req.body);
+        if(results && results.affectedRows > 0) {
+            res.status(200).send();
+        }
+        else {
+            res.status(400).json({ error: 'Mod not updated' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
 
 //get all categories
 app.get('/category', async (req, res) => {

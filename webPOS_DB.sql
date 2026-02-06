@@ -129,15 +129,13 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`item_mod`
+-- Table `webPOS_DB`.`item_mod_default`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`item_mod` ;
+DROP TABLE IF EXISTS `webPOS_DB`.`item_mod_default` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`item_mod` (
+CREATE TABLE IF NOT EXISTS `webPOS_DB`.`item_mod_default` (
   `item_id` INT NOT NULL,
   `mod_id` INT NOT NULL,
-  `is_default` BIT(1) NULL DEFAULT 0,
-  `max_quantity` INT NULL DEFAULT 1,
   PRIMARY KEY (`item_id`, `mod_id`),
   INDEX `addon_fk_idx` (`mod_id` ASC) VISIBLE,
   CONSTRAINT `item_mod_item_fk`
@@ -199,6 +197,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `tip_amount` DECIMAL(6,2) NULL,
   `payment_status` ENUM('Pending', 'Paid', 'Refunded') NULL DEFAULT 'Pending',
   `special_instructions` TEXT NULL,
+  `in_use` BIT(1) NULL,
   PRIMARY KEY (`order_id`),
   INDEX `customer_fk_idx` (`customer_id` ASC) VISIBLE,
   INDEX `user_id_idx` (`user_id` ASC) VISIBLE,

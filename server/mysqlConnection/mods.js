@@ -18,23 +18,6 @@ const selectModsByCategory = async (categoryId) => {
     }
 }
 
-//function to search for mods by related item
-const selectModsByItem = async (itemId) => {
-    try {
-        const [results] = await pool.query(
-            'SELECT * FROM mods WHERE mod_id = (SELECT mod_id FROM item_mod WHERE item_id = ?)',
-            [itemId]
-        );
-        //for all returned mods change is_availabe variable from tinyint to boolean
-        for(let i = 0; i < results.length; i++) {
-            results[i].is_available = intToBool(results[i].is_available[0]);
-        }
-        return results;
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 //function to search for mods by if their default on the item
 const selectModsByItemDefault = async (itemId) => {
     try {
@@ -104,4 +87,4 @@ const updateMod = async (mod) => {
     }
 }
 
-module.exports = { selectModsByCategory, selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod };
+module.exports = { selectModsByCategory, selectModsByItemDefault, selectModsById, addMod, updateMod };
