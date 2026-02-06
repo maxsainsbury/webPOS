@@ -9,21 +9,26 @@ const LoginPanel = (props) => {
         height: props.height,
     }
 
+    const btnSize = "90%";
     let [input, setInput] = useState('');
 
-    const btnSize = "90%";
-
-
+    //function to add a value to the end of the input variable
     const addToInput = (event) => {
+        //keep the variable to a max of 4 digits
         if(input.length < 4) {
+            //add the text of the button to the end of the variable
             setInput(input + event.target.innerText);
+
         }
     }
 
+    //function to remove a digit from the end of the input variable
     const removeFromInput = () => {
+        //set the input variable to the previous string minus the last digit
         setInput(input.substring(0, input.length - 1));
     }
 
+    //function to login to the main view
     const login = () => {
 
     }
@@ -31,10 +36,10 @@ const LoginPanel = (props) => {
     return (
         <div id="loginPanel" style={style}>
             <div id="inputSection">
-                <LoginViewCircle className="dark" isActive={false} />
-                <LoginViewCircle className="dark" isActice={false} />
-                <LoginViewCircle className="dark" isActive={false} />
-                <LoginViewCircle className="dark" isActive={false} />
+                <LoginViewCircle className={input.length >= 4 ? "light" : "dark"} />
+                <LoginViewCircle className={input.length >= 3 ? "light" : "dark"} />
+                <LoginViewCircle className={input.length >= 2 ? "light" : "dark"} />
+                <LoginViewCircle className={input.length >= 1 ? "light" : "dark"} />
             </div>
             <div id="btnSection">
                 <TouchBtn name="1" className="round" width={btnSize} onClick={addToInput} />
@@ -50,7 +55,6 @@ const LoginPanel = (props) => {
                 <TouchBtn name="0" className="round" width={btnSize} onClick={addToInput} />
                 <TouchBtn name="OK" className="round" width={btnSize} onClick={login} />
             </div>
-            <p>{input}</p>
         </div>
     )
 }

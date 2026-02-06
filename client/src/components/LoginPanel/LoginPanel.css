@@ -1,6 +1,8 @@
 #loginPanel {
     display: flex;
     flex-direction: column;
+    border: black solid 5px;
+    border-radius: 10px;
 }
 
 #inputSection {
@@ -10,10 +12,13 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
+    border-bottom: 5px solid black;
 }
 
 #btnSection {
+    width: auto;
     display: grid;
-    grid-template-columns: 33% 33% 33%;
-    grid-template-rows: 25% 25% 25% 25%;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    place-items: center;
 }
