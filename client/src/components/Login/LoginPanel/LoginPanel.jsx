@@ -1,5 +1,5 @@
 import './LoginPanel.css';
-import TouchBtn from "../Buttons/TouchBtn.jsx";
+import TouchBtn from "../../Universal/Buttons/TouchBtn.jsx";
 import LoginViewCircle from "../loginViewCircles/loginViewCircle.jsx";
 import {useState} from "react";
 
