@@ -11,10 +11,6 @@
     user-select: none;
 }
 
-.light {
-    background-color: #999999;
-}
-
 .btn:hover {
     background-color: #2a2a2a;
 }
@@ -35,11 +31,6 @@
     color: #fff;
     font-size: 1.5em;
     font-weight: 500;
-}
-
-.view {
-    padding: 0;
-    margin: 0;
 }
 
 .rectangle {
