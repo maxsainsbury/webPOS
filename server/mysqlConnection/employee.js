@@ -5,9 +5,10 @@ const selectEmployeeByPassword = async (password) => {
     try {
         const [results] = await pool.query(
             `SELECT * FROM employee WHERE password = ?`,
-            [password.password]
+            [parseInt(password.password)]
         );
-        return results[0];
+        const {password: omitted, ...employee} = results[0];
+        return employee;
     } catch (error) {
         console.log(error.message);
     }

@@ -315,7 +315,7 @@ app.post('/employees/login', async (req, res) => {
             res.status(200).json(results);
         }
         else {
-            res.status(403).json({ error: 'Incorrect Password' });
+            res.status(401).json({ error: 'Incorrect Password' });
         }
     } catch (error) {
         console.log(error.message);

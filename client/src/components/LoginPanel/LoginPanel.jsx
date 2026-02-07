@@ -29,8 +29,21 @@ const LoginPanel = (props) => {
     }
 
     //function to login to the main view
-    const login = () => {
-
+    const login = async () => {
+        try {
+            const password = input.padStart(4, "0");
+            console.log(password);
+            const response = await fetch('/api/employees/login', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({password: password}),
+            });
+            console.log(response);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
