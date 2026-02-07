@@ -1,8 +1,20 @@
 import './MainPanel.css';
-import TouchBtn from "../../Universal/Buttons/TouchBtn.jsx";
+import { useState } from 'react';
+import DashboardPanel from "../../Dashboard/DashboardPanel/DashboardPanel.jsx";
 
-const MainPanel = (props) => {
+const MainPanel = () => {
 
+    const [activeView, setActiveView] = useState('dashboard');
+
+    const views = {
+        dashboard: <DashboardPanel />
+    }
+
+    return (
+        <>
+            {views[activeView]}
+        </>
+    );
 }
 
 export default MainPanel;

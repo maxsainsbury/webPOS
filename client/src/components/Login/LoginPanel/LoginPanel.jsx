@@ -3,7 +3,7 @@ import TouchBtn from "../../Universal/Buttons/TouchBtn.jsx";
 import LoginViewCircle from "../loginViewCircles/LoginViewCircle.jsx";
 import {useState} from "react";
 
-const LoginPanel = () => {
+const LoginPanel = (props) => {
 
 
     const btnSize = "90%";
@@ -38,7 +38,14 @@ const LoginPanel = () => {
                 body: JSON.stringify({password: password}),
             });
             //parse out the employee data
-            const data = await response.json();
+            if(response.ok) {
+                const data = await response.json();
+                props.onLogin(data);
+            }
+            else {
+                console.log("Login failed");
+                setInput('');
+            }
         } catch (error) {
             console.log(error)
         }

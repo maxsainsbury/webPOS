@@ -1,9 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { appWindow } from '@tauri-apps/api/window';
 import './App.css'
 import LoginPanel from "./components/Login/LoginPanel/LoginPanel.jsx";
+import MainPanel from "./components/Main/MainPanel/MainPanel.jsx";
 
 function App() {
+
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         appWindow.maximize();
@@ -11,7 +14,11 @@ function App() {
 
   return (
     <>
-        <LoginPanel />
+        {user ? (
+            <MainPanel user={user} />
+        ) : (
+            <LoginPanel onLogin={setUser} />
+        )}
     </>
   )
 }
