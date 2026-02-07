@@ -40,7 +40,7 @@ const LoginPanel = (props) => {
                 },
                 body: JSON.stringify({password: password}),
             });
-            console.log(response);
+            const data = await response.json();
         } catch (error) {
             console.log(error)
         }
