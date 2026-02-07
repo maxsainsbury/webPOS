@@ -1,9 +1,9 @@
 {
   "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build --prefix ../react",
+    "beforeDevCommand": "npm run dev --prefix ../react",
     "devPath": "http://localhost:5173/",
-    "distDir": "../../react"
+    "distDir": "../react"
   },
   "package": {
     "productName": "webPos",
