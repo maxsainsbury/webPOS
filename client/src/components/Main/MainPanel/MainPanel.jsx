@@ -1,6 +1,8 @@
 import './MainPanel.css';
 import { useState } from 'react';
 import DashboardPanel from "../../Dashboard/DashboardPanel/DashboardPanel.jsx";
+import TopBar from "../TopBar/TopBar.jsx";
+import SideBar from "../SideBar/SideBar.jsx";
 
 const MainPanel = () => {
 
@@ -12,6 +14,8 @@ const MainPanel = () => {
 
     return (
         <>
+            <TopBar />
+            <SideBar />
             {views[activeView]}
         </>
     );
