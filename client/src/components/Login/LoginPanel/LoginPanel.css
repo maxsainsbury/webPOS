@@ -1,9 +1,11 @@
 #loginPanel {
+
     width: 22em;
     display: flex;
     flex-direction: column;
     border: black solid 5px;
     border-radius: 10px;
+    box-shadow: 0.5em 0.5em 0.2em #1a1a1a;
 }
 
 #inputSection {
