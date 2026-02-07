@@ -34,3 +34,8 @@
     place-items: center;
     gap: 0.3em;
 }
+
+#btnSection .btn {
+    height: 100%;
+    width: 100%;
+}
