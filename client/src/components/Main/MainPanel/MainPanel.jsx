@@ -13,11 +13,11 @@ const MainPanel = () => {
     }
 
     return (
-        <>
+        <div id='mainpanel'>
             <TopBar />
             <SideBar />
             {views[activeView]}
-        </>
+        </div>
     );
 }
 
