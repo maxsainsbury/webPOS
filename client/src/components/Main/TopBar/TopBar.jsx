@@ -1,6 +1,5 @@
 import './TopBar.css';
 import TouchBtn from "../../Universal/TouchBtn/TouchBtn.jsx";
-import { useEffect, useState } from "react";
 import { appWindow } from '@tauri-apps/api/window';
 
 const TopBar = () => {
