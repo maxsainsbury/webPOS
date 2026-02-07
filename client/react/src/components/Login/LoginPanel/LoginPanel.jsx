@@ -1,6 +1,6 @@
 import './LoginPanel.css';
 import TouchBtn from "../../Universal/Buttons/TouchBtn.jsx";
-import LoginViewCircle from "../loginViewCircles/loginViewCircle.jsx";
+import LoginViewCircle from "../loginViewCircles/LoginViewCircle.jsx";
 import {useState} from "react";
 
 const LoginPanel = (props) => {

@@ -1,4 +1,4 @@
-import './loginViewCircles.css';
+import './LoginViewCircles.css';
 
 const LoginViewCircle = (props) => {
 
