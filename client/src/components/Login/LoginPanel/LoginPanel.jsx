@@ -1,12 +1,10 @@
 import './LoginPanel.css';
-import TouchBtn from "../../Universal/Buttons/TouchBtn.jsx";
+import TouchBtn from "../../Universal/TouchBtn/TouchBtn.jsx";
 import LoginViewCircle from "../loginViewCircles/LoginViewCircle.jsx";
 import {useState} from "react";
 
 const LoginPanel = (props) => {
 
-
-    const btnSize = "90%";
     let [input, setInput] = useState('');
 
     //function to add a value to the end of the input variable
@@ -52,26 +50,29 @@ const LoginPanel = (props) => {
     }
 
     return (
-        <div id="loginPanel">
-            <div id="inputSection">
-                <LoginViewCircle className={input.length >= 4 ? "light" : "dark"} />
-                <LoginViewCircle className={input.length >= 3 ? "light" : "dark"} />
-                <LoginViewCircle className={input.length >= 2 ? "light" : "dark"} />
-                <LoginViewCircle className={input.length >= 1 ? "light" : "dark"} />
-            </div>
-            <div id="btnSection">
-                <TouchBtn name="1" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="2" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="3" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="4" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="5" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="6" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="7" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="8" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="9" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="Back" className="round" width={btnSize} onClick={removeFromInput} />
-                <TouchBtn name="0" className="round" width={btnSize} onClick={addToInput} />
-                <TouchBtn name="OK" className="round" width={btnSize} onClick={login} />
+        <div id="loginBox">
+            <div id="loginPanel">
+                <div id="inputSection">
+                    {[4, 3, 2, 1].map(num => (
+                        <LoginViewCircle
+                            key={num}
+                            className={input.length >= num ? "light" : "dark"}
+                        />
+                    ))}
+                </div>
+                <div id="btnSection">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                        <TouchBtn
+                            key={num}
+                            name={num.toString()}
+                            className="round"
+                            onClick={addToInput}
+                        />
+                    ))}
+                    <TouchBtn name="Back" className="round" onClick={removeFromInput} />
+                    <TouchBtn name="0" className="round" onClick={addToInput} />
+                    <TouchBtn name="OK" className="round" onClick={login} />
+                </div>
             </div>
         </div>
     )
