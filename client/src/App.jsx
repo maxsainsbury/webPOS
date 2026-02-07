@@ -1,7 +1,9 @@
-import { useState } from "react";
+import {useState} from "react";
 import './App.css'
 import LoginPanel from "./components/Login/LoginPanel/LoginPanel.jsx";
 import MainPanel from "./components/Main/MainPanel/MainPanel.jsx";
+
+import {getTauriVersion} from '@tauri-apps/api/app';
 
 function App() {
 
