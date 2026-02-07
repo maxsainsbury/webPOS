@@ -19,6 +19,7 @@ const selectEmployees = async () => {
         const [results] = await pool.query(
             `SELECT employee_id, f_name, l_name FROM employee`
         );
+        console.log(results);
         return results;
     } catch (error) {
         console.log(error.message);
@@ -83,4 +84,4 @@ const updateEmployeePassword = async (employee) => {
 }
 
 //export all functions
-module.exports = { selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmployee, updateEmployee, updateEmployeePassword };2
+module.exports = { selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmployee, updateEmployee, updateEmployeePassword };

@@ -308,14 +308,14 @@ app.post('/customers/update', async (req, res) => {
 });
 
 //employee login
-app.get('/employees/login', async (req, res) => {
+app.post('/employees/login', async (req, res) => {
     try {
         const results = await selectEmployeeByPassword(req.body);
         if(results) {
             res.status(200).json(results);
         }
         else {
-            res.status(404).json({ error: 'Employee Not Found' });
+            res.status(403).json({ error: 'Incorrect Password' });
         }
     } catch (error) {
         console.log(error.message);
@@ -330,7 +330,7 @@ app.get('/employees', async (req, res) => {
             res.status(200).json(results);
         }
         else {
-            res.status(404).json({ error: 'Employees Not Found' });
+            res.status(200).json();
         }
     } catch (error) {
         console.log(error.message);
