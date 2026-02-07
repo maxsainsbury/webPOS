@@ -11,7 +11,7 @@ function App() {
 
   return (
     <>
-        <LoginPanel width="22em" />
+        <LoginPanel />
     </>
   )
 }

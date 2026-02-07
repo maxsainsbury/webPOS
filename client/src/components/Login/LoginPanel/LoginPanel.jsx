@@ -3,11 +3,8 @@ import TouchBtn from "../../Universal/Buttons/TouchBtn.jsx";
 import LoginViewCircle from "../loginViewCircles/LoginViewCircle.jsx";
 import {useState} from "react";
 
-const LoginPanel = (props) => {
-    const style = {
-        width: props.width,
-        height: props.height,
-    }
+const LoginPanel = () => {
+
 
     const btnSize = "90%";
     let [input, setInput] = useState('');
@@ -18,7 +15,6 @@ const LoginPanel = (props) => {
         if(input.length < 4) {
             //add the text of the button to the end of the variable
             setInput(input + event.target.innerText);
-
         }
     }
 
@@ -31,8 +27,9 @@ const LoginPanel = (props) => {
     //function to login to the main view
     const login = async () => {
         try {
+            //fill out the password with 0's at the start
             const password = input.padStart(4, "0");
-            console.log(password);
+            //send the password to the backend and wait for a response
             const response = await fetch('/api/employees/login', {
                 method: "POST",
                 headers: {
@@ -40,6 +37,7 @@ const LoginPanel = (props) => {
                 },
                 body: JSON.stringify({password: password}),
             });
+            //parse out the employee data
             const data = await response.json();
         } catch (error) {
             console.log(error)
@@ -47,7 +45,7 @@ const LoginPanel = (props) => {
     }
 
     return (
-        <div id="loginPanel" style={style}>
+        <div id="loginPanel">
             <div id="inputSection">
                 <LoginViewCircle className={input.length >= 4 ? "light" : "dark"} />
                 <LoginViewCircle className={input.length >= 3 ? "light" : "dark"} />

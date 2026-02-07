@@ -1,4 +1,5 @@
 #loginPanel {
+    width: 22em;
     display: flex;
     flex-direction: column;
     border: black solid 5px;
