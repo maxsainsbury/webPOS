@@ -1,4 +1,6 @@
 .btn {
+    width: 100%;
+    height: auto;
     box-sizing: border-box;
     cursor: pointer;
     background-color: #1a1a1a;
@@ -6,8 +8,6 @@
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
-    padding: 10%;
-    margin: 5% 10%;
     user-select: none;
 }
 
