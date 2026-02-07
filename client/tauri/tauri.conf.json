@@ -61,9 +61,10 @@
         "visible": true,
         "fullscreen": false,
         "height": 600,
+        "width": 800,
         "resizable": true,
         "title": "WebPos",
-        "width": 800
+        "maximized": true
       }
     ]
   }
