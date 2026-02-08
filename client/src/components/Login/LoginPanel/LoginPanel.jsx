@@ -2,6 +2,7 @@ import './LoginPanel.css';
 import TouchBtn from "../../Universal/TouchBtn/TouchBtn.jsx";
 import LoginViewCircle from "../loginViewCircles/LoginViewCircle.jsx";
 import {useState} from "react";
+import { getApiUrl } from '../../../config/config.js'
 
 const LoginPanel = (props) => {
 
@@ -28,13 +29,14 @@ const LoginPanel = (props) => {
             //fill out the password with 0's at the start
             const password = input.padStart(4, "0");
             //send the password to the backend and wait for a response
-            const response = await fetch('/api/employees/login', {
+            const response = await fetch(`${getApiUrl()}/employees/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({password: password}),
             });
+            console.log(response);
             //parse out the employee data
             if(response.ok) {
                 const data = await response.json();
