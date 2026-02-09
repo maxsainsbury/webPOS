@@ -1,4 +1,4 @@
-const express = require('express');
+aconst express = require('express');
 const app = express();
 const cors = require('cors');
 const { selectItemsByCategory, selectItemById, addItem, updateItem } = require('./mysqlConnection/items.js');
@@ -12,6 +12,7 @@ const {selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmploye
 const {selectCustomerById} = require("./mysqlConnection/customers");
 const {addCategory, updateCategory} = require("./mysqlConnection/categories");
 const {selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod} = require("./mysqlConnection/mods");
+const { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes } = require('./mysqlConnection/orders.js');
 
 console.log(app);
 app.use(express.json());
@@ -410,6 +411,114 @@ app.post('/employees/update/password', async (req, res) => {
         console.log(error.message);
     }
 });
+
+app.get('/orders/:id', async (req, res) => {
+    try {
+        const results = await selectOrderById(req.params.id);
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'Order Not Found' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+app.get('/customer/:id/orders', async (req, res) => {
+    try {
+        const results = await selectOrdersByCustomer(req.params.id);
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'No customer or Orders' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+app.get('/orders/date/:date', async (req, res) => {
+    try {
+        const results = await selectOrdersByDate(req.params.date);
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'No Orders for that date' });
+        }
+    } catch(error) {
+        console.log(error.message);
+    }
+});
+
+app.get('/orders/payment/:paymentStatus', async (req, res) => {
+    try {
+        const results = await selectOrdersByPaymentStatus(req.params.paymentStatus);
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'No orders for that payment status' });
+        }
+    } catch(error) {
+        console.log(error.message);
+    }
+});
+
+app.post('/order/add', async (req, res) => {
+    try {
+        const results = await addEmployee(req.body);
+        if(results) {
+            if (results.affectedRows > 0) {
+                res.status(201).send();
+            }
+            else {
+                res.status(400).json({error: 'Could not add Order'});
+            }
+        }
+        else {
+            res.status(400).json({error: 'Could not add Order'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+app.post('/order/update', async (req, res) => {
+    try {
+        const results = await updateEmployee(req.body);
+        if(results) {
+            if(results.affectedRows > 0) {
+                res.status(201).send();
+            }
+            else {
+                res.status(400).json({error: 'Could not update Order'});
+            }
+        }
+        else {
+            res.status(400).json({error: 'Could not update Order'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+app.get('/order/types/', async (req, res) => {
+    try {
+        const results = await getOrderTypes();
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({ error: 'No Order Types' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 app.listen(8080, () => {
     console.log('server listening on port 8080');
