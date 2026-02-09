@@ -1,4 +1,4 @@
-aconst express = require('express');
+const express = require('express');
 const app = express();
 const cors = require('cors');
 const { selectItemsByCategory, selectItemById, addItem, updateItem } = require('./mysqlConnection/items.js');
