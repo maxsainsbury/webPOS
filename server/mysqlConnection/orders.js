@@ -115,9 +115,12 @@ const updateOrder = async (order) => {
 const getOrderTypes = async () => {
     try {
         const [results] = await pool.query (
-            `SHOW COLUMNS FROM orders LIKE order_type`
+            `SELECT COLUMN_TYPE
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'webpos_db'
+                AND TABLE_NAME = 'orders'
+                AND COLUMN_NAME = 'order_type'`
         );
-        consolt.log(results);
         return results;
     } catch (error) {
         console.log(error.message);
