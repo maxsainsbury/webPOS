@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `customer_id` INT NULL,
   `user_id` INT NOT NULL,
   `order_number` INT NOT NULL,
-  `order_type` ENUM('Dine-in', 'Takeout', 'Delivery') NOT NULL,
+  `order_type` ENUM('Quick Sale', 'WalkIn', 'Pickup', 'Delivery') NOT NULL,
   `order_status` ENUM('Scheduled', 'Pending', 'Preparing', 'Ready', 'Out for Delivery', 'Completed', 'Cancelled') NULL,
   `is_future_order` BIT(1) NULL,
   `scheduled_date` DATE NULL,
