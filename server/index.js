@@ -470,7 +470,7 @@ app.get('/orders/payment/:paymentStatus', async (req, res) => {
 
 app.post('/order/add', async (req, res) => {
     try {
-        const results = await addEmployee(req.body);
+        const results = await addOrder(req.body);
         if(results) {
             if (results.affectedRows > 0) {
                 res.status(201).send();
@@ -489,7 +489,7 @@ app.post('/order/add', async (req, res) => {
 
 app.post('/order/update', async (req, res) => {
     try {
-        const results = await updateEmployee(req.body);
+        const results = await updateOrder(req.body);
         if(results) {
             if(results.affectedRows > 0) {
                 res.status(201).send();
