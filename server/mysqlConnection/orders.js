@@ -112,4 +112,16 @@ const updateOrder = async (order) => {
     }
 }
 
-module.exports = { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder };
+const getOrderTypes = async () => {
+    try {
+        const [results] = await pool.query (
+            `SHOW COLUMNS FROM orders LIKE order_type`
+        );
+        consolt.log(results);
+        return results;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+module.exports = { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes };
