@@ -6,7 +6,7 @@ const DashboardPanel = (props) => {
 
     return (
         <div id="dashboardPanel">
-            <p>Dashboard</p>
+            <p>{props.user.f_name}</p>
         </div>
     )
 }

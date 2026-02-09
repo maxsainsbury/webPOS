@@ -4,12 +4,12 @@ import DashboardPanel from "../../Dashboard/DashboardPanel/DashboardPanel.jsx";
 import TopBar from "../TopBar/TopBar.jsx";
 import SideBar from "../SideBar/SideBar.jsx";
 
-const MainPanel = () => {
+const MainPanel = (props) => {
 
     const [activeView, setActiveView] = useState('dashboard');
 
     const views = {
-        dashboard: <DashboardPanel />
+        dashboard: <DashboardPanel user={props.user} />
     }
 
     return (
