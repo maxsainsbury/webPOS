@@ -1,13 +1,11 @@
 #topbar {
+    grid-area: topbar;
     z-index: 5;
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: auto;
     padding: 0.5em;
     background: #1a1a1a;
-    border:5px solid #000000;
+    border-bottom:5px solid #000000;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 1em;

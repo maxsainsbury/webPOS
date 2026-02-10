@@ -8,7 +8,7 @@ const SideBar = () => {
     const { orderTypes, setOrderTypes } = useOrderTypes();
     useEffect(() => {
         getOrderTypes().then(setOrderTypes);
-    })
+    }, []);
 
     return (
         <div id="sideBar">
@@ -16,8 +16,8 @@ const SideBar = () => {
                 orderTypes.map((orderType, index) => (
                     <TouchBtn
                         key={index}
-                        name={orderType.name}
-                        className="rectangle"
+                        name={orderType}
+                        className="rectangle sidebarBtn"
                     />
                 ))
             }

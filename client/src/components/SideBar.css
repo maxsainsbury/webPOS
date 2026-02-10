@@ -1,0 +1,11 @@
+#sideBar {
+    grid-area: sidebar;
+    width: 12em;
+    display: flex;
+    flex-direction: column;
+    border-right: 5px solid #000;
+}
+
+.sidebarBtn {
+    margin: 0.2em 0.4em;
+}
