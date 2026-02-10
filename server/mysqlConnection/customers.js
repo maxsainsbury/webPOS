@@ -7,7 +7,7 @@ const selectCustomerByPhone = async (phoneNumber) => {
             `SELECT * FROM customers WHERE phone = ?`,
             [phoneNumber]
         );
-        return results[0];
+        return results;
     } catch (error) {
         console.log(error.message);
     }

@@ -2,7 +2,7 @@ import { getApiUrl } from "../config/config.js";
 
 export const getCustomerByPhone = async (phoneNumber) => {
     try {
-        const response = await fetch(`${getApiUrl}/customers/phone/${phoneNumber}`, {
+        const response = await fetch(`${getApiUrl()}/customers/phone/${phoneNumber}`, {
             method: "GET",
             headers: {}
         });

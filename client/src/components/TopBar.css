@@ -1,6 +1,5 @@
 #topbar {
     grid-area: topbar;
-    z-index: 5;
     width: 100%;
     height: auto;
     padding: 0.5em;
