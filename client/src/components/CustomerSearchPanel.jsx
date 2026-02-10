@@ -9,12 +9,6 @@ const CustomerSearchPanel = (props) => {
 
     const formatPhone = (value) => {
         const digits = value.replace(/\D/g, '');
-        if (digits.length === 10) {
-            setDisabled(false);
-        }
-        else {
-            setDisabled(true);
-        }
         if (digits.length < 3) {
             return digits;
         }
@@ -28,6 +22,8 @@ const CustomerSearchPanel = (props) => {
 
     const handleChange = (event) => {
         setPhone(formatPhone(event.target.value));
+        const digits = event.target.value.replace(/\D/g, '');
+        setDisabled(digits.length !== 10);
     }
 
     const searchCustomers = async () => {
@@ -42,7 +38,12 @@ const CustomerSearchPanel = (props) => {
                     <label htmlFor="phone">Phone Number:</label>
                     <input type="text" id="phone" placeholder="(   )   -    " value={phone} onChange={handleChange}/>
                 </form>
-                <TouchBtn id="phoneSearchBtn" name="Search" className="rectangle" style={{pointerEvents: isDisabled ? 'none' : 'auto', opacity: isDisabled ? 0.6 : 1}} onClick={searchCustomers} />
+                <TouchBtn
+                    id="phoneSearchBtn"
+                    name="Search"
+                    className="rectangle"
+                    disabled={isDisabled}
+                    onClick={searchCustomers} />
             </div>
         </div>
     )
