@@ -8,7 +8,7 @@ const SideBar = () => {
     const { orderTypes, setOrderTypes } = useOrderTypes();
     useEffect(() => {
         getOrderTypes().then(setOrderTypes);
-    }, []);
+    }, [setOrderTypes]);
 
     return (
         <div id="sideBar">
