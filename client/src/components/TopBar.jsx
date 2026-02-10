@@ -1,6 +1,6 @@
 import './TopBar.css';
 import { useState } from 'react';
-import TouchBtn from "../../Universal/TouchBtn/TouchBtn.jsx";
+import TouchBtn from "./TouchBtn.jsx";
 import {getCurrentWindow} from '@tauri-apps/api/window';
 const appWindow = getCurrentWindow();
 

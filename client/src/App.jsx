@@ -1,11 +1,11 @@
 import {useState} from "react";
 import './App.css'
-import LoginPanel from "./components/Login/LoginPanel/LoginPanel.jsx";
-import MainPanel from "./components/Main/MainPanel/MainPanel.jsx";
+import LoginPanel from "./components/LoginPanel.jsx";
+import MainPanel from "./components/MainPanel.jsx";
+import {useUser} from "./hooks/useUser.js";
 
 function App() {
-
-    const [user, setUser] = useState(null);
+  const { user, setUser } = useUser();
 
   return (
     <>

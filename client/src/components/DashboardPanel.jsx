@@ -1,5 +1,5 @@
 import './DashboardPanel.css';
-import TouchBtn from "../../Universal/TouchBtn/TouchBtn.jsx";
+import TouchBtn from "./TouchBtn.jsx";
 
 const DashboardPanel = (props) => {
 

@@ -1,8 +1,8 @@
 import './LoginPanel.css';
-import TouchBtn from "../../Universal/TouchBtn/TouchBtn.jsx";
-import LoginViewCircle from "../loginViewCircles/LoginViewCircle.jsx";
+import TouchBtn from "./TouchBtn.jsx";
+import LoginViewCircle from "./LoginViewCircle.jsx";
 import {useState} from "react";
-import { getApiUrl } from '../../../config/config.js'
+import {login} from "../api/employee.js";
 
 const LoginPanel = (props) => {
 
@@ -23,31 +23,13 @@ const LoginPanel = (props) => {
         setInput(input.substring(0, input.length - 1));
     }
 
-    //function to login to the main view
-    const login = async () => {
-        try {
-            //fill out the password with 0's at the start
-            const password = input.padStart(4, "0");
-            //send the password to the backend and wait for a response
-            const response = await fetch(`${getApiUrl()}/employees/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({password: password}),
-            });
-            console.log(response);
-            //parse out the employee data
-            if(response.ok) {
-                const data = await response.json();
-                props.onLogin(data);
-            }
-            else {
-                console.log("Login failed");
-                setInput('');
-            }
-        } catch (error) {
-            console.log(error)
+    const handleLogin = async () => {
+        const user = await login(input);
+        if(user) {
+            props.onLogin(user);
+        }
+        else {
+            setInput("");
         }
     }
 
@@ -73,7 +55,7 @@ const LoginPanel = (props) => {
                     ))}
                     <TouchBtn name="Back" className="round" onClick={removeFromInput} />
                     <TouchBtn name="0" className="round" onClick={addToInput} />
-                    <TouchBtn name="OK" className="round" onClick={login} />
+                    <TouchBtn name="OK" className="round" onClick={handleLogin} />
                 </div>
             </div>
         </div>
