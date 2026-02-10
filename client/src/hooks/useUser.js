@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-export function useUser() {
+export const useUser = () => {
     const [user, setUser] = useState(null);
 
     return {user, setUser};
