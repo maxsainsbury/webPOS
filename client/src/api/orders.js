@@ -12,7 +12,29 @@ export const getOrderTypes = async () => {
             data = data.replace(/'\)$/g, "");
             return data.split("','")
         }
-        else console.log("Error fetching order types");
+        else {
+            console.log("Error fetching order types");
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+export const getOrdersByPaymentStatus = async (paymentStatus) => {
+    try {
+        const response = await fetch(`${getApiUrl()}/orders/payment/${paymentStatus}`, {
+            method: "GET",
+            headers: {}
+        });
+        if(response.ok) {
+            return await response.json();
+        }
+        else {
+            console.log("Error fetching orders by payment status");
+            return null;
+        }
     } catch (error) {
         console.log(error);
         return null;
