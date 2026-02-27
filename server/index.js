@@ -13,10 +13,25 @@ const {selectCustomerById} = require("./mysqlConnection/customers");
 const {addCategory, updateCategory} = require("./mysqlConnection/categories");
 const {selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod} = require("./mysqlConnection/mods");
 const { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes } = require('./mysqlConnection/orders.js');
+const {selectAllItems} = require("./mysqlConnection/items");
 
 console.log(app);
 app.use(express.json());
 app.use(cors());
+
+app.get('/items', async (req, res) => {
+    try {
+        const results = await selectAllItems();
+        if(results) {
+            res.status(200).json(results);
+        }
+        else {
+            res.status(404).json({error: 'Not Found'});
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 //get an item by the item id
 app.get('/items/:itemId', async (req, res) => {
@@ -178,7 +193,7 @@ app.post('/mods/update', async (req, res) => {
 });
 
 //get all categories
-app.get('/category', async (req, res) => {
+app.get('/categories', async (req, res) => {
     try {
         const results = await selectCategory();
         //if there are results

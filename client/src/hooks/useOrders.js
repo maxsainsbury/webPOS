@@ -1,7 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-export const useOrderTypes = () => {
-    const [orderTypes, setOrderTypes] = useState([]);
+export const useOrderTypes = (initialOrderTypes = []) => {
+    const [orderTypes, setOrderTypes] = useState(initialOrderTypes);
     return { orderTypes, setOrderTypes };
 }
 

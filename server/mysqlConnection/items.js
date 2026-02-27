@@ -1,6 +1,20 @@
 const pool = require('./connection.js');
 const {intToBool, boolToInt} = require('../helpers/helperFunctions.js');
 
+
+const selectAllItems = async () => {
+    try {
+        const [results] = await pool.query(
+            'SELECT * FROM `items`'
+        );
+        for(let i = 0; i < results.length; i++) {
+            results[i].is_available = intToBool(results[i].is_available[0]);
+        }
+        return results;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 //function to select all items related by a category
 const selectItemsByCategory = async (categoryId) => {
     try {
@@ -67,4 +81,4 @@ const updateItem = async (item) => {
 }
 
 //export all functions
-module.exports = {selectItemsByCategory, selectItemById, addItem, updateItem };
+module.exports = {selectAllItems, selectItemsByCategory, selectItemById, addItem, updateItem };
