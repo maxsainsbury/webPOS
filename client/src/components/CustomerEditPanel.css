@@ -11,6 +11,7 @@
 }
 
 #customerInfo {
+    position: relative;
     width: 50%;
     height: 60%;
     background-color: #1a1a1a;
@@ -20,6 +21,14 @@
 
 #customerForm {
     width: 50%;
+}
+
+#customerEditBtn {
+    height: 20%;
+    margin: 1em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 input {

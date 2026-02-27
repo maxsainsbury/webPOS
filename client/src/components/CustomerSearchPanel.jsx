@@ -2,34 +2,24 @@ import './CustomerSearchPanel.css'
 import {useState} from "react";
 import TouchBtn from "./TouchBtn.jsx";
 import {getCustomerByPhone} from "../api/customer.js";
+import {formatPhone} from "../helpers/helperFunctions.js";
+import {digitsOnly} from "../helpers/regex.js";
 
 const CustomerSearchPanel = (props) => {
     const [phone, setPhone] = useState('');
     const [isDisabled, setDisabled] = useState(true);
 
-    const formatPhone = (value) => {
-        const digits = value.replace(/\D/g, '');
-        if (digits.length <= 3) {
-            return digits;
-        }
-        else if (digits.length <= 6) {
-            return `(${digits.slice(0,3)}) ${digits.slice(3)}`;
-        }
-        else {
-            return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6,10)}`;
-        }
-    }
-
     const handleChange = (event) => {
         setPhone(formatPhone(event.target.value));
-        const digits = event.target.value.replace(/\D/g, '');
+        const digits = event.target.value.replace(digitsOnly, '');
         setDisabled(digits.length !== 10);
     }
 
     const searchCustomers = async () => {
-        let customer = await getCustomerByPhone(phone.replace(/\D/g, ''));
+        let customer = await getCustomerByPhone(phone.replace(digitsOnly, ''));
         if(!customer) {
             customer = {
+                customer_id: 0,
                 f_name: "",
                 l_name: "",
                 phone: phone,
@@ -39,7 +29,7 @@ const CustomerSearchPanel = (props) => {
                 city: "",
                 provence: "",
                 postal_code: "",
-                delivery_instructions: "",
+                delivery_instructions: ""
             }
         }
         props.onSearch(customer);
@@ -56,7 +46,7 @@ const CustomerSearchPanel = (props) => {
                     id="phoneSearchBtn"
                     name="Search"
                     className="rectangle"
-                    disabled={isDisabled}
+                    disabled={phone.replace(digitsOnly, '').length !== 10}
                     onClick={searchCustomers} />
             </div>
         </div>
