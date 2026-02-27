@@ -1,0 +1,41 @@
+#darkenBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#customerInfo {
+    width: 50%;
+    height: 60%;
+    background-color: #1a1a1a;
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+#customerForm {
+    width: 50%;
+}
+
+input {
+    height: 1.6em;
+    font-size: 1.5em;
+}
+
+label {
+    margin-left: 0.2em;
+}
+
+.inputPair {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5em;
+    border: black solid 2px;
+    border-radius: 10px;
+}

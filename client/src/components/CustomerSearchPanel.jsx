@@ -9,7 +9,7 @@ const CustomerSearchPanel = (props) => {
 
     const formatPhone = (value) => {
         const digits = value.replace(/\D/g, '');
-        if (digits.length < 3) {
+        if (digits.length <= 3) {
             return digits;
         }
         else if (digits.length <= 6) {
@@ -27,7 +27,21 @@ const CustomerSearchPanel = (props) => {
     }
 
     const searchCustomers = async () => {
-        const customer = await getCustomerByPhone(phone.replace(/\D/g, ''));
+        let customer = await getCustomerByPhone(phone.replace(/\D/g, ''));
+        if(!customer) {
+            customer = {
+                f_name: "",
+                l_name: "",
+                phone: phone,
+                email: "",
+                address_line1: "",
+                address_line2: "",
+                city: "",
+                provence: "",
+                postal_code: "",
+                delivery_instructions: "",
+            }
+        }
         props.onSearch(customer);
     }
 
