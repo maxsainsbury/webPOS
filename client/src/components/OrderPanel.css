@@ -1,16 +1,22 @@
 #categories {
     display: flex;
     flex-direction: row;
+    border-bottom: 5px solid black;
 }
 
 .categoryBtn {
     width: 10em;
-    margin: 0.5em 0.5em;
+    margin: 0.5em;
 }
 
 #items {
+    width: 80%;
     height: auto;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows:auto;
+}
+
+.itemBtn {
+    margin: 0.5em;
 }

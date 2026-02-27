@@ -33,6 +33,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     flex-wrap: wrap;
     color: #fff;
     font-size: 1.3em;
