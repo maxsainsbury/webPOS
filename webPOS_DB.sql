@@ -158,7 +158,7 @@ DROP TABLE IF EXISTS `webPOS_DB`.`customers` ;
 
 CREATE TABLE IF NOT EXISTS `webPOS_DB`.`customers` (
   `customer_id` INT NOT NULL AUTO_INCREMENT,
-  `f_name` VARCHAR(45) NULL,
+  `f_name` VARCHAR(45) NOT NULL,
   `l_name` VARCHAR(45) NULL,
   `phone` VARCHAR(15) NOT NULL,
   `address_line1` VARCHAR(100) NULL,
