@@ -7,9 +7,7 @@ export const getItems = async () => {
             headers: {}
         });
         if(response.ok) {
-            const data = await response.json();
-            console.log(data);
-            return await data;
+            return await response.json();
         }
         else {
             console.log("Error fetching items");
