@@ -38,7 +38,7 @@ const MainPanel = (props) => {
     return (
         <div id='mainpanel'>
             <TopBar />
-            <SideBar onOrder={setCustomerSearchActive} />
+            <SideBar onOrder={setCustomerSearchActive} activeView={activeView} />
             {views[activeView]}
             {customerSearchActive ? <CustomerSearchPanel onSearch={customerSearch} /> : null}
             {customerEditActive ? <CustomerEditPanel customer={customer} onNext={openOrder} /> : null}

@@ -27,7 +27,6 @@ const CustomerEditPanel = (props) => {
         if(event.target.name === "phone") {
             updateField(event.target.name, formatPhone(event.target.value));
         }
-        console.log(customer);
     }
 
     const updateOrAdd = async () => {
@@ -41,11 +40,9 @@ const CustomerEditPanel = (props) => {
                 });
                 if(changed) {
                     if(customer.customer_id > 0) {
-                        console.log('updated');
                         updateCustomer(customer);
                     }
                     else {
-                        console.log('added');
                         addCustomer(customer);
                     }
                 }

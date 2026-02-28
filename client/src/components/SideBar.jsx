@@ -13,7 +13,7 @@ const SideBar = (props) => {
     return (
         <div id="sideBar">
             {
-                orderTypes.map((orderType, index) => (
+                (props.activeView === 'dashboard') ? orderTypes.map((orderType, index) => (
                     <TouchBtn
                         key={index}
                         name={orderType}
@@ -27,7 +27,10 @@ const SideBar = (props) => {
                             }
                         }}
                     />
-                ))
+                )) : null
+            }
+            {
+                (props.activeView === 'orders') ? <TouchBtn name="fuck" /> : null
             }
         </div>
     )

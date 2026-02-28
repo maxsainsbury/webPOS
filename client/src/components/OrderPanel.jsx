@@ -10,7 +10,6 @@ const OrderPanel = (props) => {
     const {categories, setCategories} = useCategories(getCategories);
     const {items, setItems} = useItems(getItems);
     const [currentCategoryId, setCurrentCategoryId] = useState(1);
-    console.log(items);
     const addToOrder = () => {
 
     }
