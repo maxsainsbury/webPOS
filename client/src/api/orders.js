@@ -40,3 +40,7 @@ export const getOrdersByPaymentStatus = async (paymentStatus) => {
         return null;
     }
 }
+
+export const getOrderById = async (orderId) => {
+
+}

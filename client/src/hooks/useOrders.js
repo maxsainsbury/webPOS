@@ -5,7 +5,18 @@ export const useOrderTypes = (initialOrderTypes = []) => {
     return { orderTypes, setOrderTypes };
 }
 
-export const usePendingOrders = () => {
-    const [pendingOrders, setPendingOrders] = useState([]);
-    return { pendingOrders, setPendingOrders };
+export const usePendingOrders = (fetchOrders) => {
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        const loadOrders = async () => {
+            const data = await fetchOrders();
+            if (data) {
+                setOrders(data);
+            }
+        }
+        loadOrders();
+    }, [fetchOrders]);
+
+    return {orders, setOrders};
 }

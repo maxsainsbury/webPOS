@@ -20,6 +20,31 @@ export const getCustomerByPhone = async (phoneNumber) => {
     }
 }
 
+export const getCustomerById  = async (customerId) => {
+    try {
+        customerId  = Array.isArray(customerId) ? customerId : [customerId];
+        let output = []
+        for (let i = 0; i < customerId.length; i++) {
+            const response = await fetch(`${getApiUrl()}/customers/${customerId[i]}`, {
+                method: "GET",
+                headers: {}
+            });
+            if (response.ok) {
+                output.push(await response.json());
+            } else {
+                console.log("Error getting customer");
+            }
+        }
+        if (output.length > 0) {
+            return output
+        }
+        return null;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 export const updateCustomer = async (customer) => {
     try {
         const response = await fetch(`${getApiUrl()}/customers/update`, {

@@ -1,6 +1,10 @@
 #dashboardPanel {
     grid-area: content;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto 1fr;
+}
+
+.orderBtn {
+    margin: 0.5em;
 }
