@@ -132,7 +132,7 @@ const updateInUse = async (orderId, inUseStatus) => {
         const [results] = await pool.query (
             `UPDATE orders
             SET in_use = ?
-            WHERE order_id = ?`
+            WHERE order_id = ?`,
             [inUseStatus, orderId]
         );
         return results;

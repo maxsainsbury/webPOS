@@ -8,7 +8,7 @@ import CustomerSearchPanel from "./CustomerSearchPanel.jsx";
 import {useCustomer} from "../hooks/useCustomer.js";
 import CustomerEditPanel from "./CustomerEditPanel.jsx";
 import {usePendingOrders} from "../hooks/useOrders.js";
-import {getOrdersByPaymentStatus} from "../api/orders.js";
+import {getOrdersByPaymentStatus, updateInUse} from "../api/orders.js";
 import {getCustomerById} from "../api/customer.js";
 import {useItems, useItemsForOrder} from "../hooks/useItems.js";
 import {getItems, getItemsForOrder} from "../api/items.js";
@@ -56,6 +56,14 @@ const MainPanel = (props) => {
     }
 
     const openOrder = async (customer, order) => {
+        console.log(order)
+        if(order.in_use > 0) {
+            console.log(order.in_use);
+            return;
+        }
+        console.log(order.in_use);
+        order.in_use = true;
+        await updateInUse(order);
         const orderItems = await getItemsForOrder(order.order_id);
         const fullOrder = {...order, items: orderItems};
         setCustomerEditActive(false);
@@ -63,7 +71,6 @@ const MainPanel = (props) => {
         setCurrentOrder(fullOrder);
         setModifiedOrder(fullOrder);
         setActiveView('order');
-
     }
 
     const modifyOrder = (item, editType) => {

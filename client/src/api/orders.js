@@ -62,3 +62,25 @@ export const getOrderById = async (orderId) => {
         return null;
     }
 }
+
+export const updateInUse = async (order) => {
+    try {
+        const response = await fetch(`${getApiUrl()}/order/update/inuse`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({order_id: order.order_id, in_use: order.in_use})
+        });
+        if(response.ok) {
+            return true;
+        }
+        else {
+            console.log("Error updating in use status");
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
