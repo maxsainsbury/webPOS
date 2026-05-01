@@ -127,4 +127,18 @@ const getOrderTypes = async () => {
     }
 }
 
-module.exports = { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes };
+const updateInUse = async (orderId, inUseStatus) => {
+    try {
+        const [results] = await pool.query (
+            `UPDATE orders
+            SET in_use = ?
+            WHERE order_id = ?`
+            [inUseStatus, orderId]
+        );
+        return results;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+module.exports = { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes, updateInUse };

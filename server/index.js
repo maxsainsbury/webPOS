@@ -14,6 +14,7 @@ const {addCategory, updateCategory} = require("./mysqlConnection/categories");
 const {selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod} = require("./mysqlConnection/mods");
 const { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes } = require('./mysqlConnection/orders.js');
 const {selectAllItems, selectItemsByOrder} = require("./mysqlConnection/items");
+const {updateInUse} = require("./mysqlConnection/orders");
 
 console.log(app);
 app.use(express.json());
@@ -543,6 +544,25 @@ app.get('/order/types/', async (req, res) => {
         }
         else {
             res.status(404).json({ error: 'No Order Types' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+app.post('/order/inUse', async (req, res) => {
+    try {
+        const results = await updateInUse(req.body.order_id, req.body.in_use);
+        if(results) {
+            if(results.affectedRows > 0) {
+                res.status(201).send();
+            }
+            else {
+                res.status(400).json({error: 'Could not update in use status'});
+            }
+        }
+        else {
+            res.status(400).json({error: 'Could not update in use status'});
         }
     } catch (error) {
         console.log(error.message);
