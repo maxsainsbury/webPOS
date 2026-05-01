@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
   `item_id` INT NOT NULL AUTO_INCREMENT,
   `item_name` VARCHAR(100) NOT NULL,
   `category_id` INT NOT NULL,
-  `is_available` BIT(1) NULL DEFAULT 1,
+  `is_available` TINYINT(1) NULL DEFAULT 1,
   PRIMARY KEY (`item_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_item_fk`
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `scheduled_time` TIME NULL,
   `payment_status` ENUM('Pending', 'Paid', 'Refunded') NULL DEFAULT 'Pending',
   `special_instructions` TEXT NULL,
-  `in_use` BIT(1) NULL,
+  `in_use` TINYINT(1) NULL,
   PRIMARY KEY (`order_id`),
   INDEX `customer_fk_idx` (`customer_id` ASC) VISIBLE,
   INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
