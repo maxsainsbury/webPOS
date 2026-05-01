@@ -192,9 +192,6 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   `is_future_order` BIT(1) NULL,
   `scheduled_date` DATE NULL,
   `scheduled_time` TIME NULL,
-  `subtotal` DECIMAL(8,2) NOT NULL,
-  `tax_amount` DECIMAL(6,2) NOT NULL,
-  `tip_amount` DECIMAL(6,2) NULL,
   `payment_status` ENUM('Pending', 'Paid', 'Refunded') NULL DEFAULT 'Pending',
   `special_instructions` TEXT NULL,
   `in_use` BIT(1) NULL,
@@ -281,6 +278,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`payments` (
   `payment_method` ENUM('Cash', 'Credit Card', 'Debit Card', 'Online') NOT NULL,
   `amount` DECIMAL(8,2) NOT NULL,
   `processed_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `tip` DECIMAL(8,2) NULL,
   PRIMARY KEY (`payment_id`),
   INDEX `order_id_fk_idx` (`order_id` ASC) VISIBLE,
   CONSTRAINT `order_id_fk`
