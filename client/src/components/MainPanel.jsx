@@ -10,9 +10,12 @@ import CustomerEditPanel from "./CustomerEditPanel.jsx";
 import {usePendingOrders} from "../hooks/useOrders.js";
 import {getOrdersByPaymentStatus} from "../api/orders.js";
 import {getCustomerById} from "../api/customer.js";
+import {useItems, useItemsForOrder} from "../hooks/useItems.js";
+import {getItems, getItemsForOrder} from "../api/items.js";
 
 const MainPanel = (props) => {
     const { customer, setCustomer } = useCustomer();
+    const [ orderType, setOrderType ] = useState("");
 
     const [activeView, setActiveView] = useState('loading');
     const [customerSearchActive, setCustomerSearchActive] = useState(false);
@@ -20,8 +23,12 @@ const MainPanel = (props) => {
 
     const fetchOrders = useCallback(() => getOrdersByPaymentStatus('Pending'), []);
     const {orders, setOrders} = usePendingOrders(fetchOrders);
+
     const [customers, setCustomers] = useState([]);
     const [currentOrder, setCurrentOrder] = useState({});
+    const [modifiedOrder, setModifiedOrder] = useState({});
+
+    const {items, setItems} = useItems(getItems);
 
     useEffect(() => {
         const loadCustomers = async () => {
@@ -40,11 +47,6 @@ const MainPanel = (props) => {
         loadCustomers();
     }, [orders]);
 
-    const views = {
-        dashboard: <DashboardPanel user={props.user} orders={orders} customers={customers} setCurrentOrder={setCurrentOrder} />,
-        order: <OrderPanel user={props.user} customer={customer} />,
-    }
-
     const customerSearch = (searchedCustomer) => {
         if(searchedCustomer) {
             setCustomerSearchActive(false);
@@ -53,20 +55,46 @@ const MainPanel = (props) => {
         }
     }
 
-    const openOrder = (editedCustomer) => {
+    const openOrder = async (customer, order) => {
+        const orderItems = await getItemsForOrder(order.order_id);
+        const fullOrder = {...order, items: orderItems};
         setCustomerEditActive(false);
-        setCustomer(editedCustomer);
+        setCustomer(customer);
+        setCurrentOrder(fullOrder);
+        setModifiedOrder(fullOrder);
         setActiveView('order');
 
+    }
+
+    const modifyOrder = (item, editType) => {
+        switch (editType) {
+            case 'add':
+                setModifiedOrder(prev => ({
+                    ...prev,
+                    items: [...(prev.items ?? []), item]
+                }));
+                break;
+            case 'delete':
+                setModifiedOrder(prev => ({
+                    ...prev,
+                    items: prev.items.filter(i => i.order_item_id !== item.order_item_id)
+                }));
+                break;
+        }
+    }
+
+    const views = {
+        dashboard: <DashboardPanel user={props.user} orders={orders} customers={customers} openOrder={openOrder} />,
+        order: <OrderPanel user={props.user} customer={customer} items={items} modifyOrder={modifyOrder} orderType={orderType} />,
     }
 
     return (
         <div id='mainpanel'>
             <TopBar />
-            <SideBar onOrder={setCustomerSearchActive} activeView={activeView} />
+            <SideBar onOrder={setCustomerSearchActive} activeView={activeView} order={currentOrder} modifiedOrder={modifiedOrder} modifyOrder={modifyOrder} setOrder={setCurrentOrder} setOrderType={setOrderType} items={items} />
             {views[activeView]}
             {customerSearchActive ? <CustomerSearchPanel onSearch={customerSearch} /> : null}
-            {customerEditActive ? <CustomerEditPanel customer={customer} onNext={openOrder} /> : null}
+            {customerEditActive ? <CustomerEditPanel customer={customer} openOrder={openOrder} user={props.user}/> : null}
         </div>
     );
 }

@@ -46,7 +46,16 @@ const CustomerEditPanel = (props) => {
                         addCustomer(customer);
                     }
                 }
-                props.onNext(customer);
+                props.openOrder(customer, {
+                    order_id: 0,
+                    customer_id: customer.customer_id,
+                    user_id: props.user.user_id,
+                    order_number: 1,
+                    order_type: props.order_type,
+                    order_status: "pending",
+                    is_future_order: false,
+
+                });
             }
         }
         catch(error) {

@@ -7,6 +7,52 @@
 }
 
 .sidebarBtn {
-    margin: 0.6em 0.6em 0 0.6em;
+    margin: 0.3em 0.6em;
     aspect-ratio: 2.5 / 1;
+}
+
+#orderSidebar {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#orderInfo {
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #fff;
+    margin: 0.2em;
+    border: 5px solid #000;
+    border-radius: 10px;
+    color: black;
+}
+
+#paymentInfo {
+    border-top: 3px solid #000;
+}
+
+.paymentGroup {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: 500;
+    border-bottom: 1px solid #000;
+}
+
+#orderBtns {
+    margin-bottom: 0.3em;
+}
+
+#items {
+    display: table-column;
+    width: 100%;
+    height: 100%;
+}
+
+.item {
+    border-bottom: 1px solid #000;
 }

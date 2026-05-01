@@ -3,16 +3,12 @@ import {useCategories} from "../hooks/useCategories.js";
 import {getCategories} from "../api/categories.js";
 import TouchBtn from "./TouchBtn.jsx";
 import {useState} from "react";
-import {useItems} from "../hooks/useItems.js";
-import {getItems} from "../api/items.js";
 
 const OrderPanel = (props) => {
     const {categories, setCategories} = useCategories(getCategories);
-    const {items, setItems} = useItems(getItems);
     const [currentCategoryId, setCurrentCategoryId] = useState(1);
-    const addToOrder = () => {
 
-    }
+
 
     return (
         <div id="orderPanel">
@@ -22,7 +18,7 @@ const OrderPanel = (props) => {
                 ))}
             </div>
             <div id="items">
-                {items
+                {props.items
                     .filter(item => item.category_id === currentCategoryId)
                     .sort((a, b) => {
                         const nameA = a.item_name.toLowerCase();
@@ -32,7 +28,7 @@ const OrderPanel = (props) => {
                         if (nameA > nameB) return 1;
                         return 0;
                     }).map(item => (
-                    <TouchBtn key={item.item_id} name={item.item_name} className="itemBtn rectangle" onClick={addToOrder} />
+                    <TouchBtn key={item.item_id} name={item.item_name} className="itemBtn rectangle" onClick={() => props.modifyOrder(item.item_id, 'add')} />
                 ))}
             </div>
         </div>
