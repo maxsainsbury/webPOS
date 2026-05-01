@@ -12,6 +12,7 @@ import {getOrdersByPaymentStatus, updateInUse} from "../api/orders.js";
 import {getCustomerById} from "../api/customer.js";
 import {useItems, useItemsForOrder} from "../hooks/useItems.js";
 import {getItems, getItemsForOrder} from "../api/items.js";
+import { confirm } from '@tauri-apps/plugin-dialog'
 
 const MainPanel = (props) => {
     const { customer, setCustomer } = useCustomer();
@@ -58,7 +59,7 @@ const MainPanel = (props) => {
     const openOrder = async (customer, order) => {
         console.log(order)
         if(order.in_use > 0) {
-            console.log(order.in_use);
+            await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {title: 'Order in use', kind: 'warning', cancelLabel: 'Go Back', okLabel: 'Open Order'});
             return;
         }
         console.log(order.in_use);
