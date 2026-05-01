@@ -42,5 +42,23 @@ export const getOrdersByPaymentStatus = async (paymentStatus) => {
 }
 
 export const getOrderById = async (orderId) => {
-
+    try {
+        const response = await fetch(`${getApiUrl()}/orders/${orderId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderId)
+        });
+        if(response.ok) {
+            return await response.json();
+        }
+        else {
+            console.log("Error fetching orders by order id");
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 }
