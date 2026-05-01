@@ -1,11 +1,14 @@
 {
   "identifier": "default",
   "description": "Default capabilities",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
     "core:window:default",
     "core:window:allow-maximize",
-    "core:window:allow-set-fullscreen"
+    "core:window:allow-set-fullscreen",
+    "dialog:default"
   ]
 }
