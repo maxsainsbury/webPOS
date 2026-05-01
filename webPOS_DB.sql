@@ -5,21 +5,21 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema webPOS_DB
+-- Schema webpos_db
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema webPOS_DB
+-- Schema webpos_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `webPOS_DB` DEFAULT CHARACTER SET utf8 ;
-USE `webPOS_DB` ;
+CREATE SCHEMA IF NOT EXISTS `webpos_db` DEFAULT CHARACTER SET utf8 ;
+USE `webpos_db` ;
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`employee`
+-- Table `webpos_db`.`employee`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`employee` ;
+DROP TABLE IF EXISTS `webpos_db`.`employee` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`employee` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`employee` (
   `employee_id` INT NOT NULL AUTO_INCREMENT,
   `password` INT NOT NULL,
   `role` ENUM('admin', 'employee') NOT NULL,
@@ -39,11 +39,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`tax_rates`
+-- Table `webpos_db`.`tax_rates`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`tax_rates` ;
+DROP TABLE IF EXISTS `webpos_db`.`tax_rates` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`tax_rates` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`tax_rates` (
   `tax_id` INT NOT NULL AUTO_INCREMENT,
   `tax_name` VARCHAR(45) NOT NULL,
   `tax_rate` DECIMAL(5,4) NOT NULL,
@@ -52,11 +52,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`prices`
+-- Table `webpos_db`.`prices`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`prices` ;
+DROP TABLE IF EXISTS `webpos_db`.`prices` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`prices` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`prices` (
   `price_id` INT NOT NULL AUTO_INCREMENT,
   `price` DECIMAL(6,2) NULL,
   PRIMARY KEY (`price_id`))
@@ -64,11 +64,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`categories`
+-- Table `webpos_db`.`categories`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`categories` ;
+DROP TABLE IF EXISTS `webpos_db`.`categories` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`categories` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`categories` (
   `category_id` INT NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(50) NOT NULL,
   `tax_id` INT NULL,
@@ -77,23 +77,23 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`categories` (
   UNIQUE INDEX `name_UNIQUE` (`category_name` ASC) VISIBLE,
   CONSTRAINT `category_tax_fk`
     FOREIGN KEY (`tax_id`)
-    REFERENCES `webPOS_DB`.`tax_rates` (`tax_id`)
+    REFERENCES `webpos_db`.`tax_rates` (`tax_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `category_price_fk`
     FOREIGN KEY (`price_id`)
-    REFERENCES `webPOS_DB`.`prices` (`price_id`)
+    REFERENCES `webpos_db`.`prices` (`price_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`items`
+-- Table `webpos_db`.`items`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`items` ;
+DROP TABLE IF EXISTS `webpos_db`.`items` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`items` (
   `item_id` INT NOT NULL AUTO_INCREMENT,
   `item_name` VARCHAR(100) NOT NULL,
   `category_id` INT NOT NULL,
@@ -102,18 +102,18 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`items` (
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_item_fk`
     FOREIGN KEY (`category_id`)
-    REFERENCES `webPOS_DB`.`categories` (`category_id`)
+    REFERENCES `webpos_db`.`categories` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`mods`
+-- Table `webpos_db`.`mods`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`mods` ;
+DROP TABLE IF EXISTS `webpos_db`.`mods` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mods` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`mods` (
   `mod_id` INT NOT NULL AUTO_INCREMENT,
   `mod_name` VARCHAR(50) NULL,
   `category_id` INT NOT NULL,
@@ -122,41 +122,41 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`mods` (
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_mod_fk`
     FOREIGN KEY (`category_id`)
-    REFERENCES `webPOS_DB`.`categories` (`category_id`)
+    REFERENCES `webpos_db`.`categories` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`item_mod_default`
+-- Table `webpos_db`.`item_mod_default`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`item_mod_default` ;
+DROP TABLE IF EXISTS `webpos_db`.`item_mod_default` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`item_mod_default` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`item_mod_default` (
   `item_id` INT NOT NULL,
   `mod_id` INT NOT NULL,
   PRIMARY KEY (`item_id`, `mod_id`),
   INDEX `addon_fk_idx` (`mod_id` ASC) VISIBLE,
   CONSTRAINT `item_mod_item_fk`
     FOREIGN KEY (`item_id`)
-    REFERENCES `webPOS_DB`.`items` (`item_id`)
+    REFERENCES `webpos_db`.`items` (`item_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `item_mod_mod_fk`
     FOREIGN KEY (`mod_id`)
-    REFERENCES `webPOS_DB`.`mods` (`mod_id`)
+    REFERENCES `webpos_db`.`mods` (`mod_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`customers`
+-- Table `webpos_db`.`customers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`customers` ;
+DROP TABLE IF EXISTS `webpos_db`.`customers` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`customers` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`customers` (
   `customer_id` INT NOT NULL AUTO_INCREMENT,
   `f_name` VARCHAR(45) NOT NULL,
   `l_name` VARCHAR(45) NULL,
@@ -178,11 +178,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`orders`
+-- Table `webpos_db`.`orders`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`orders` ;
+DROP TABLE IF EXISTS `webpos_db`.`orders` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`orders` (
   `order_id` INT NOT NULL AUTO_INCREMENT,
   `customer_id` INT NULL,
   `user_id` INT NOT NULL,
@@ -201,23 +201,23 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`orders` (
   UNIQUE INDEX `order_number_UNIQUE` (`order_number` ASC) VISIBLE,
   CONSTRAINT `customer_id_fk`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `webPOS_DB`.`customers` (`customer_id`)
+    REFERENCES `webpos_db`.`customers` (`customer_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `employee_id_fk`
     FOREIGN KEY (`user_id`)
-    REFERENCES `webPOS_DB`.`employee` (`employee_id`)
+    REFERENCES `webpos_db`.`employee` (`employee_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`order_items`
+-- Table `webpos_db`.`order_items`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`order_items` ;
+DROP TABLE IF EXISTS `webpos_db`.`order_items` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`order_items` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`order_items` (
   `order_items_id` INT NOT NULL AUTO_INCREMENT,
   `order_id` INT NOT NULL,
   `item_id` INT NOT NULL,
@@ -229,23 +229,23 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`order_items` (
   INDEX `item_fk_idx` (`item_id` ASC) VISIBLE,
   CONSTRAINT `order_items_order_fk`
     FOREIGN KEY (`order_id`)
-    REFERENCES `webPOS_DB`.`orders` (`order_id`)
+    REFERENCES `webpos_db`.`orders` (`order_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `order_items_item_fk`
     FOREIGN KEY (`item_id`)
-    REFERENCES `webPOS_DB`.`items` (`item_id`)
+    REFERENCES `webpos_db`.`items` (`item_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`order_items_mods`
+-- Table `webpos_db`.`order_items_mods`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`order_items_mods` ;
+DROP TABLE IF EXISTS `webpos_db`.`order_items_mods` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`order_items_mods` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`order_items_mods` (
   `order_items_mod_id` INT NOT NULL AUTO_INCREMENT,
   `order_items_id` INT NOT NULL,
   `mod_id` INT NOT NULL,
@@ -256,23 +256,23 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`order_items_mods` (
   PRIMARY KEY (`order_items_mod_id`),
   CONSTRAINT `order_items_fk`
     FOREIGN KEY (`order_items_id`)
-    REFERENCES `webPOS_DB`.`order_items` (`order_items_id`)
+    REFERENCES `webpos_db`.`order_items` (`order_items_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `order_items_mods_mod_fk`
     FOREIGN KEY (`mod_id`)
-    REFERENCES `webPOS_DB`.`mods` (`mod_id`)
+    REFERENCES `webpos_db`.`mods` (`mod_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `webPOS_DB`.`payments`
+-- Table `webpos_db`.`payments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `webPOS_DB`.`payments` ;
+DROP TABLE IF EXISTS `webpos_db`.`payments` ;
 
-CREATE TABLE IF NOT EXISTS `webPOS_DB`.`payments` (
+CREATE TABLE IF NOT EXISTS `webpos_db`.`payments` (
   `payment_id` INT NOT NULL AUTO_INCREMENT,
   `order_id` INT NOT NULL,
   `payment_method` ENUM('Cash', 'Credit Card', 'Debit Card', 'Online') NOT NULL,
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `webPOS_DB`.`payments` (
   INDEX `order_id_fk_idx` (`order_id` ASC) VISIBLE,
   CONSTRAINT `order_id_fk`
     FOREIGN KEY (`order_id`)
-    REFERENCES `webPOS_DB`.`orders` (`order_id`)
+    REFERENCES `webpos_db`.`orders` (`order_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -293,7 +293,7 @@ DROP USER IF EXISTS server;
 SET SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 CREATE USER 'server' IDENTIFIED BY 'server';
 
-GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `webPOS_DB`.* TO 'server';
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `webpos_db`.* TO 'server';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
