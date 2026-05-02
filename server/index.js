@@ -12,9 +12,8 @@ const {selectEmployeeByPassword, selectEmployees, selectEmployeeById, addEmploye
 const {selectCustomerById} = require("./mysqlConnection/customers");
 const {addCategory, updateCategory} = require("./mysqlConnection/categories");
 const {selectModsByItem, selectModsByItemDefault, selectModsById, addMod, updateMod} = require("./mysqlConnection/mods");
-const { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes } = require('./mysqlConnection/orders.js');
-const {selectAllItems, selectItemsByOrder} = require("./mysqlConnection/items");
-const {updateInUse} = require("./mysqlConnection/orders");
+const { selectOrderById, selectOrdersByCustomer, selectOrdersByDate, selectOrdersByPaymentStatus, addOrder, updateOrder, getOrderTypes, updateInUse  } = require('./mysqlConnection/orders.js');
+const { selectAllItems } = require("./mysqlConnection/items");
 
 console.log(app);
 app.use(express.json());
@@ -55,20 +54,6 @@ app.get('/items/:itemId', async (req, res) => {
         console.log(error.message);
     }
 });
-
-app.get('/order/items/:orderId', async (req, res) => {
-    try {
-        const results = await selectItemsByOrder(req.params.orderId);
-        if(results) {
-            res.status(200).json(results);
-        }
-        else {
-            res.status(404).json({error: 'Not Found'});
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-})
 
 //get all item by a category id
 app.get('/category/:categoryId/items', async (req, res) => {

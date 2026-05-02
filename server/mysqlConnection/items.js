@@ -49,23 +49,6 @@ const selectItemById = async (itemId) => {
     }
 }
 
-const selectItemsByOrder = async (orderId) => {
-    try {
-        const [results] = await pool.query(
-            `SELECT *
-            FROM items INNER JOIN order_items USING(item_id)
-            WHERE order_items.order_id = ?`,
-            [orderId]
-        );
-        for(let i = 0; i < results.length; i++) {
-            results[i].is_available = intToBool(results[i].is_available);
-        }
-        return results;
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 //function to add an item to the database
 const addItem = async (item) => {
     try {
