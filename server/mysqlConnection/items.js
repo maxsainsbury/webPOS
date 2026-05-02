@@ -81,4 +81,4 @@ const updateItem = async (item) => {
 }
 
 //export all functions
-module.exports = {selectAllItems, selectItemsByCategory, selectItemById, selectItemsByOrder, addItem, updateItem };
+module.exports = {selectAllItems, selectItemsByCategory, selectItemById, addItem, updateItem };

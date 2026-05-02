@@ -3,6 +3,7 @@ const {intToBool, boolToInt} = require('../helpers/helperFunctions.js');
 
 //function to search for a order by the id
 const selectOrderById = async (orderId) => {
+    console.log(orderId);
     try {
         let order = await pool.query(
             `SELECT * FROM orders WHERE order_id = ?`,
@@ -15,18 +16,20 @@ const selectOrderById = async (orderId) => {
             `SELECT * FROM order_items WHERE order_id = ?`,
             [orderId]
         );
+        items = items[0];
         for(let i = 0; i < items.length; i++) {
             let mods = await pool.query(
                 `SELECT * FROM webpos_db.order_items_mods WHERE order_items_id = ?`,
                 [items[i].order_items_id]
             );
         }
+        const mods = []
         let results = {
             order: order,
             items: items,
             mods: mods
         }
-
+        console.log(results);
         return results;
     } catch (error) {
         console.log(error.message);
@@ -85,34 +88,48 @@ const selectOrdersByPaymentStatus = async (paymentStatus) => {
 }
 
 //function to add a order to the database
-const addOrder = async (order) => {
+const addOrder = async (fullOrder) => {
     try {
+        const {order, items} = fullOrder;
         order.is_future_order = boolToInt(order.is_future_order);
         order.in_use = boolToInt(order.in_use);
-        const [results] = await pool.query(
+        const [orderResults] = await pool.query(
             `INSERT INTO orders 
             (customer_id, user_id, order_number, order_type, order_status, is_future_order, scheduled_date, scheduled_time, subtotal, tax_amount, payment_status, special_instructions)
             VALUE (?, ?, ?, ?, 'Scheduled', ?, ?, ?, ?, ?, ?, ?)`,
             [order.customer_id, order.user_id, order.order_number, order.order_type, order.is_future_order, order.scheduled_date, order.scheduled_time, order.subtotal, order.tax_amount, order.payment_status. order.special_instructions]
         );
-        return results;
+        const [orderItemResults] = await pool.query(
+            `INSERT INTO order_items
+            (order_id, item_id, quantity)
+            VALUE (?, ?, ?)`,
+            [order.order_id, items.item_id, items.quantity]
+        )
+        return {order: orderResults, items: orderItemResults};
     } catch (error) {
         console.log(error.message);
     }
 }
 
 //function to update an order in the database
-const updateOrder = async (order) => {
+const updateOrder = async (fullOrder) => {
     try {
+        const {order, items} = fullOrder;
         order.is_future_order = boolToInt(order.is_future_order);
         order.in_use = boolToInt(order.in_use);
-        const [results] = await pool.query(
+        const [orderResults] = await pool.query(
             `UPDATE orders
             SET customer_id = ?, user_id = ?, order_number = ?, order_type = ?, order_status = ?, is_future_order = ?, scheduled_date = ?, scheduled_time = ?, subtotal = ?, tax_amount = ?, tip_amount = ?, payment_status = ?, special_instructions = ?
-            WHERE order_id = ?`
+            WHERE order_id = ?`,
             [order.customer_id, order.user_id, order.order_number, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.subtotal, order.tax_amount, order.tip_amount, order.payment_status, order.special_instructions, order.order_id]
         );
-        return results;
+        const [orderItemResults] = await pool.query(
+            `UPDATE order_items
+            SET item_id=?, quantity=?
+            WHERE order_id=?`,
+            [items.item_id, items.quantity, order.order_id]
+        )
+        return {order: orderResults, items: orderItemResults};
     } catch (error) {
         console.log(error.message);
     }
