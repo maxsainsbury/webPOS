@@ -34,7 +34,7 @@ const TopBar = () => {
         {name: 'test9', func: testFunction},
         {name: 'test10', func: testFunction},
         {name: 'test11', func: testFunction},
-        {name: 'Fullscreen', func: toggleFullscreen},];
+        {name: 'Fullscreen', func: toggleFullscreen},]
 
     return (
         <div id="topbar">
