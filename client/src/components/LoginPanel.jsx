@@ -32,6 +32,7 @@ const LoginPanel = (props) => {
             setInput("");
         }
     }
+
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key >= 0 && e.key <= 9) {
