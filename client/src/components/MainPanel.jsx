@@ -57,12 +57,16 @@ const MainPanel = (props) => {
     }
 
     const openOrder = async (customer, order) => {
-        console.log(order)
-        if(order.in_use > 0) {
-            await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {title: 'Order in use', kind: 'warning', cancelLabel: 'Go Back', okLabel: 'Open Order'});
-            return;
+        if(order.in_use) {
+            console.log('order is in use');
+            const proceed = await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {
+                title: 'Order in use',
+                kind: 'warning',
+                cancelLabel: 'Go Back',
+                okLabel: 'Open Order'
+            });
+            if (!proceed) return;
         }
-        console.log(order.in_use);
         order.in_use = true;
         await updateInUse(order);
         const orderItems = await getItemsForOrder(order.order_id);
@@ -100,7 +104,8 @@ const MainPanel = (props) => {
         <div id='mainpanel'>
             <TopBar />
             <SideBar onOrder={setCustomerSearchActive} activeView={activeView} order={currentOrder} modifiedOrder={modifiedOrder} modifyOrder={modifyOrder} setOrder={setCurrentOrder} setOrderType={setOrderType} items={items} />
-            {views[activeView]}
+            {activeView === 'dashboard' && <DashboardPanel user={props.user} orders={orders} customers={customers} openOrder={openOrder} />}
+            {activeView === 'order' && <OrderPanel user={props.user} customer={customer} items={items} modifyOrder={modifyOrder} orderType={orderType} />}
             {customerSearchActive ? <CustomerSearchPanel onSearch={customerSearch} /> : null}
             {customerEditActive ? <CustomerEditPanel customer={customer} openOrder={openOrder} user={props.user}/> : null}
         </div>

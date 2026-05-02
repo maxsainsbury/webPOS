@@ -552,10 +552,8 @@ app.get('/order/types/', async (req, res) => {
 
 app.post('/order/update/inuse', async (req, res) => {
     try {
-        const inUse = req.body.in_use === false ? 0 : 1;
-        const results = await updateInUse(req.body.order_id, inUse);
+        const results = await updateInUse(req.body.order_id, req.body.in_use);
         if(results) {
-            console.log(results);
             if(results.affectedRows > 0) {
                 res.status(201).send();
             }

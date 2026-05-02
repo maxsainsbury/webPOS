@@ -9,7 +9,7 @@ const OrderPanel = (props) => {
     const [currentCategoryId, setCurrentCategoryId] = useState(1);
 
 
-
+    console.log(props.items);
     return (
         <div id="orderPanel">
             <div id="categories">

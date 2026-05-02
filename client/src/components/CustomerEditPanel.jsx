@@ -54,7 +54,7 @@ const CustomerEditPanel = (props) => {
                     order_type: props.order_type,
                     order_status: "pending",
                     is_future_order: false,
-
+                    in_use: false,
                 });
             }
         }

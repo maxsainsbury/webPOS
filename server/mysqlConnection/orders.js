@@ -10,6 +10,7 @@ const selectOrderById = async (orderId) => {
         );
         order = order[0];
         order.is_future_order = intToBool(order.is_future_order);
+        order.in_use = intToBool(order.in_use);
         let items = await pool.query(
             `SELECT * FROM order_items WHERE order_id = ?`,
             [orderId]
@@ -40,7 +41,8 @@ const selectOrdersByCustomer = async (customerId) => {
             [customerId]
         );
         for(let i = 0; i < results.length; i++) {
-            results.is_future_order = intToBool(results.is_future_order);
+            results[i].is_future_order = intToBool(results[i].is_future_order);
+            results[i].in_use = intToBool(results[i].in_use);
         }
         return results;
     } catch (error) {
@@ -56,7 +58,8 @@ const selectOrdersByDate = async (date) => {
             [date]
         );
         for(let i = 0; i < results.length; i++) {
-            results.is_future_order = intToBool(results.is_future_order);
+            results[i].is_future_order = intToBool(results[i].is_future_order);
+            results[i].in_use = intToBool(results[i].in_use);
         }
         return results;
     } catch (error) {
@@ -72,7 +75,8 @@ const selectOrdersByPaymentStatus = async (paymentStatus) => {
             [paymentStatus]
         );
         for(let i = 0; i < results.length; i++) {
-            results.is_future_order = intToBool(results.is_future_order);
+            results[i].is_future_order = intToBool(results[i].is_future_order);
+            results[i].in_use = intToBool(results[i].in_use);
         }
         return results;
     } catch (error) {
@@ -84,6 +88,7 @@ const selectOrdersByPaymentStatus = async (paymentStatus) => {
 const addOrder = async (order) => {
     try {
         order.is_future_order = boolToInt(order.is_future_order);
+        order.in_use = boolToInt(order.in_use);
         const [results] = await pool.query(
             `INSERT INTO orders 
             (customer_id, user_id, order_number, order_type, order_status, is_future_order, scheduled_date, scheduled_time, subtotal, tax_amount, payment_status, special_instructions)
@@ -100,6 +105,7 @@ const addOrder = async (order) => {
 const updateOrder = async (order) => {
     try {
         order.is_future_order = boolToInt(order.is_future_order);
+        order.in_use = boolToInt(order.in_use);
         const [results] = await pool.query(
             `UPDATE orders
             SET customer_id = ?, user_id = ?, order_number = ?, order_type = ?, order_status = ?, is_future_order = ?, scheduled_date = ?, scheduled_time = ?, subtotal = ?, tax_amount = ?, tip_amount = ?, payment_status = ?, special_instructions = ?
@@ -129,6 +135,7 @@ const getOrderTypes = async () => {
 
 const updateInUse = async (orderId, inUseStatus) => {
     try {
+        inUseStatus = boolToInt(inUseStatus);
         const [results] = await pool.query (
             `UPDATE orders
             SET in_use = ?
