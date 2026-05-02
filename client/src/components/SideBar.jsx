@@ -36,14 +36,12 @@ const SideBar = (props) => {
                     <div id="orderSidebar">
                         <div id="orderInfo">
                             <div id="sidebar-items">
-                                {(props.modifiedOrder.items) ?
-                                    props.modifiedOrder.items.map((item) => (
-                                        <div key={item.id} className="item">
-                                            <p>{props.items.find(i => i.item_id === item)?.item_name}</p>
-                                            <p>{props.items.find(i => i.item_id === item)?.item}</p>
-                                        </div>
-                                    )) : null
-                                }
+                                {props.modifiedOrder.items?.map((item, index) => (
+                                    <div key={index} className="item">
+                                        <p>{item.item_name}</p>
+                                        <p>{item.item_price}</p>
+                                    </div>
+                                ))}
                             </div>
                             <div id="paymentInfo">
                                 <div id="subtotal" className="paymentGroup">
