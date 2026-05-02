@@ -35,7 +35,7 @@ const SideBar = (props) => {
                 (props.activeView === 'order') ?
                     <div id="orderSidebar">
                         <div id="orderInfo">
-                            <div id="items">
+                            <div id="sidebar-items">
                                 {(props.modifiedOrder.items) ?
                                     props.modifiedOrder.items.map((item) => (
                                         <div key={item.id} className="item">

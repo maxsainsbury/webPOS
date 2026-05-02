@@ -9,7 +9,6 @@ const OrderPanel = (props) => {
     const [currentCategoryId, setCurrentCategoryId] = useState(1);
 
 
-    console.log(props.items);
     return (
         <div id="orderPanel">
             <div id="categories">
@@ -17,7 +16,7 @@ const OrderPanel = (props) => {
                     <TouchBtn key={category.category_id} name={category.category_name} className="categoryBtn rectangle" onClick={() => setCurrentCategoryId(category.category_id)}></TouchBtn>
                 ))}
             </div>
-            <div id="items">
+            <div id="order-items">
                 {props.items
                     .filter(item => item.category_id === currentCategoryId)
                     .sort((a, b) => {
@@ -28,7 +27,7 @@ const OrderPanel = (props) => {
                         if (nameA > nameB) return 1;
                         return 0;
                     }).map(item => (
-                    <TouchBtn key={item.item_id} name={item.item_name} className="itemBtn rectangle" onClick={() => props.modifyOrder(item.item_id, 'add')} />
+                    <TouchBtn key={item.item_id} name={item.item_name} className="itemBtn rectangle" onClick={() => props.modifyOrder(item, 'add')} />
                 ))}
             </div>
         </div>

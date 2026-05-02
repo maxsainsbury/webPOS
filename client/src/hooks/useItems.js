@@ -11,7 +11,7 @@ export const useItems = (fetchItems) => {
             }
         }
         loadItems();
-    }, [fetchItems]);
+    }, []);
 
     return {items, setItems};
 }

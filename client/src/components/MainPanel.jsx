@@ -58,7 +58,6 @@ const MainPanel = (props) => {
 
     const openOrder = async (customer, order) => {
         if(order.in_use) {
-            console.log('order is in use');
             const proceed = await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {
                 title: 'Order in use',
                 kind: 'warning',
