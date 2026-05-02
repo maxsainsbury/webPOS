@@ -8,7 +8,6 @@ const OrderPanel = (props) => {
     const {categories, setCategories} = useCategories(getCategories);
     const [currentCategoryId, setCurrentCategoryId] = useState(1);
 
-
     return (
         <div id="orderPanel">
             <div id="categories">
@@ -27,7 +26,12 @@ const OrderPanel = (props) => {
                         if (nameA > nameB) return 1;
                         return 0;
                     }).map(item => (
-                    <TouchBtn key={item.item_id} name={item.item_name} className="itemBtn rectangle" onClick={() => props.modifyOrder(item, 'add')} />
+                    <TouchBtn
+                        key={item.item_id}
+                        name={item.item_name}
+                        className='itemBtn rectangle'
+                        disabled={!item.is_available}
+                        onClick={() => props.modifyOrder(item, 'add')} />
                 ))}
             </div>
         </div>
