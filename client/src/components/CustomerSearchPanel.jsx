@@ -1,5 +1,5 @@
 import './CustomerSearchPanel.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import TouchBtn from "./TouchBtn.jsx";
 import {getCustomerByPhone} from "../api/customer.js";
 import {formatPhone} from "../helpers/helperFunctions.js";
@@ -7,12 +7,9 @@ import {digitsOnly} from "../helpers/regex.js";
 
 const CustomerSearchPanel = (props) => {
     const [phone, setPhone] = useState('');
-    const [isDisabled, setDisabled] = useState(true);
 
     const handleChange = (event) => {
         setPhone(formatPhone(event.target.value));
-        const digits = event.target.value.replace(digitsOnly, '');
-        setDisabled(digits.length !== 10);
     }
 
     const searchCustomers = async () => {
@@ -35,13 +32,24 @@ const CustomerSearchPanel = (props) => {
         props.onSearch(customer);
     }
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Enter') {
+                searchCustomers();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [searchCustomers])
+
+
     return (
         <div id="darkenBackground">
             <div id="customerSearchPanel">
-                <form>
+                <div id="searchBox">
                     <label htmlFor="phone">Phone Number:</label>
                     <input type="text" id="phone" placeholder="(   )   -    " value={phone} onChange={handleChange}/>
-                </form>
+                </div>
                 <TouchBtn
                     id="phoneSearchBtn"
                     name="Search"

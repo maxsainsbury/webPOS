@@ -4,6 +4,7 @@ import TouchBtn from "./TouchBtn.jsx";
 import {formatPhone} from "../helpers/helperFunctions.js";
 import {addCustomer, updateCustomer} from "../api/customer.js";
 import {digitsOnly} from "../helpers/regex.js";
+import {useEffect} from "react";
 
 const CustomerEditPanel = (props) => {
 
@@ -63,10 +64,20 @@ const CustomerEditPanel = (props) => {
         }
     }
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Enter') {
+                updateOrAdd();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [updateOrAdd])
+
     return (
         <div id="darkenBackground">
             <div id="customerInfo">
-                <form id="customerForm">
+                <div id="customerBox">
                     {Object.keys(customer)
                         .filter(key => !excludeFields.includes(key))
                         .map((key) => (
@@ -81,7 +92,7 @@ const CustomerEditPanel = (props) => {
                         className="rectangle"
                         disabled={customer.f_name.length <= 0 || customer.phone.replace(digitsOnly, '').length !== 10}
                         onClick={updateOrAdd} />
-                </form>
+                </div>
             </div>
         </div>
     )
