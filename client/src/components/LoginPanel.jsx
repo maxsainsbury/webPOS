@@ -1,7 +1,7 @@
 import './LoginPanel.css';
 import TouchBtn from "./TouchBtn.jsx";
 import LoginViewCircle from "./LoginViewCircle.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {login} from "../api/employee.js";
 
 const LoginPanel = (props) => {
@@ -9,11 +9,11 @@ const LoginPanel = (props) => {
     let [input, setInput] = useState('');
 
     //function to add a value to the end of the input variable
-    const addToInput = (event) => {
+    const addToInput = (value) => {
         //keep the variable to a max of 4 digits
         if(input.length < 4) {
             //add the text of the button to the end of the variable
-            setInput(input + event.target.innerText);
+            setInput(input + value);
         }
     }
 
@@ -32,6 +32,21 @@ const LoginPanel = (props) => {
             setInput("");
         }
     }
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key >= 0 && e.key <= 9) {
+                addToInput(e.key);
+            }
+            else if (e.key === 'Backspace') {
+                removeFromInput();
+            }
+            else if (e.key === 'Enter') {
+                handleLogin();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [handleLogin])
 
     return (
         <div id="loginBox">
@@ -50,11 +65,11 @@ const LoginPanel = (props) => {
                             key={num}
                             name={num.toString()}
                             className="round"
-                            onClick={addToInput}
+                            onClick={() => addToInput(num.toString())}
                         />
                     ))}
                     <TouchBtn name="Back" className="round" onClick={removeFromInput} />
-                    <TouchBtn name="0" className="round" onClick={addToInput} />
+                    <TouchBtn name="0" className="round" onClick={() => addToInput('0')} />
                     <TouchBtn name="OK" className="round" onClick={handleLogin} />
                 </div>
             </div>
