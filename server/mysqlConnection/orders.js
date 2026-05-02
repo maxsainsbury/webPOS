@@ -3,7 +3,6 @@ const {intToBool, boolToInt} = require('../helpers/helperFunctions.js');
 
 //function to search for a order by the id
 const selectOrderById = async (orderId) => {
-    console.log(orderId);
     try {
         let order = await pool.query(
             `SELECT * FROM orders WHERE order_id = ?`,
@@ -29,7 +28,6 @@ const selectOrderById = async (orderId) => {
             items: items,
             mods: mods
         }
-        console.log(results);
         return results;
     } catch (error) {
         console.log(error.message);
