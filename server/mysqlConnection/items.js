@@ -8,7 +8,7 @@ const selectAllItems = async () => {
             'SELECT * FROM `items`'
         );
         for(let i = 0; i < results.length; i++) {
-            results[i].is_available = intToBool(results[i].is_available[0]);
+            results[i].is_available = intToBool(results[i].is_available);
         }
         return results;
     } catch (error) {
@@ -23,7 +23,7 @@ const selectItemsByCategory = async (categoryId) => {
             [categoryId]
         );
         for(let i = 0; i < results.length; i++) {
-            results[i].is_available = intToBool(results[i].is_available[0]);
+            results[i].is_available = intToBool(results[i].is_available);
         }
         return results;
     } catch (error) {
@@ -42,7 +42,7 @@ const selectItemById = async (itemId) => {
              WHERE item_id = 2`,
             [itemId]
         );
-        results[0].is_available = intToBool(results[0].is_available[0]);
+        results[0].is_available = intToBool(results[0].is_available);
         return results;
     } catch (error) {
         console.log(error.message);
@@ -58,7 +58,7 @@ const selectItemsByOrder = async (orderId) => {
             [orderId]
         );
         for(let i = 0; i < results.length; i++) {
-            results[i].is_available = intToBool(results[i].is_available[0]);
+            results[i].is_available = intToBool(results[i].is_available);
         }
         return results;
     } catch (error) {
