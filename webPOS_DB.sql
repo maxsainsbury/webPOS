@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema webpos_db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `webpos_db` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `webpos_db` ;
 USE `webpos_db` ;
 
 -- -----------------------------------------------------
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `webpos_db`.`orders` (
   `order_number` INT NOT NULL,
   `order_type` ENUM('Quick Sale', 'WalkIn', 'Pickup', 'Delivery') NOT NULL,
   `order_status` ENUM('Scheduled', 'Pending', 'Preparing', 'Ready', 'Out for Delivery', 'Completed', 'Cancelled') NULL,
-  `is_future_order` BIT(1) NULL,
+  `is_future_order` TINYINT(1) NULL,
   `scheduled_date` DATE NULL,
   `scheduled_time` TIME NULL,
   `payment_status` ENUM('Pending', 'Paid', 'Refunded') NULL DEFAULT 'Pending',
