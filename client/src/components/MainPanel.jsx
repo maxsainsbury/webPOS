@@ -8,10 +8,10 @@ import CustomerSearchPanel from "./CustomerSearchPanel.jsx";
 import {useCustomer} from "../hooks/useCustomer.js";
 import CustomerEditPanel from "./CustomerEditPanel.jsx";
 import {usePendingOrders} from "../hooks/useOrders.js";
-import {getOrdersByPaymentStatus, updateInUse} from "../api/orders.js";
+import {getOrderById, getOrdersByPaymentStatus, updateInUse} from "../api/orders.js";
 import {getCustomerById} from "../api/customer.js";
-import {useItems, useItemsForOrder} from "../hooks/useItems.js";
-import {getItems, getItemsForOrder} from "../api/items.js";
+import {useItems} from "../hooks/useItems.js";
+import {getItems} from "../api/items.js";
 import { confirm } from '@tauri-apps/plugin-dialog'
 
 const MainPanel = (props) => {
@@ -56,8 +56,10 @@ const MainPanel = (props) => {
         }
     }
 
-    const openOrder = async (customer, order) => {
-        if(order.in_use) {
+    const openOrder = async (customer, orderId) => {
+        const fetchedOrder = await getOrderById(orderId);
+        if (!fetchedOrder) return;
+        if(fetchedOrder.order.in_use) {
             const proceed = await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {
                 title: 'Order in use',
                 kind: 'warning',
@@ -66,15 +68,20 @@ const MainPanel = (props) => {
             });
             if (!proceed) return;
         }
-        order.in_use = true;
-        await updateInUse(order);
-        const orderItems = await getItemsForOrder(order.order_id);
-        const fullOrder = {...order, items: orderItems};
+        else {
+            fetchedOrder.order.in_use = true;
+            await updateInUse(fetchedOrder.order);
+        }
         setCustomerEditActive(false);
         setCustomer(customer);
-        setCurrentOrder(fullOrder);
-        setModifiedOrder(fullOrder);
+        setCurrentOrder(fetchedOrder);
+        setModifiedOrder(fetchedOrder);
         setActiveView('order');
+    }
+
+    const saveOrder = async (order) => {
+        console.log(order);
+        console.log(customer);
     }
 
     const modifyOrder = (item, editType) => {
@@ -94,19 +101,45 @@ const MainPanel = (props) => {
         }
     }
 
-    const views = {
-        dashboard: <DashboardPanel user={props.user} orders={orders} customers={customers} openOrder={openOrder} />,
-        order: <OrderPanel user={props.user} customer={customer} items={items} modifyOrder={modifyOrder} orderType={orderType} />,
-    }
-
     return (
         <div id='mainpanel'>
             <TopBar />
-            <SideBar onOrder={setCustomerSearchActive} activeView={activeView} order={currentOrder} modifiedOrder={modifiedOrder} modifyOrder={modifyOrder} setOrder={setCurrentOrder} setOrderType={setOrderType} items={items} />
-            {activeView === 'dashboard' && <DashboardPanel user={props.user} orders={orders} customers={customers} openOrder={openOrder} />}
-            {activeView === 'order' && <OrderPanel user={props.user} customer={customer} items={items} modifyOrder={modifyOrder} orderType={orderType} />}
-            {customerSearchActive ? <CustomerSearchPanel onSearch={customerSearch} /> : null}
-            {customerEditActive ? <CustomerEditPanel customer={customer} openOrder={openOrder} user={props.user}/> : null}
+            <SideBar
+                onOrder={setCustomerSearchActive}
+                activeView={activeView}
+                order={currentOrder}
+                modifiedOrder={modifiedOrder}
+                modifyOrder={modifyOrder}
+                setOrder={setCurrentOrder}
+                setOrderType={setOrderType}
+                items={items}
+                saveOrder={saveOrder}
+            />
+            {activeView === 'dashboard' &&
+                <DashboardPanel
+                    user={props.user}
+                    orders={orders}
+                    customers={customers}
+                    openOrder={openOrder}
+                />}
+            {activeView === 'order' &&
+                <OrderPanel
+                    user={props.user}
+                    customer={customer}
+                    items={items}
+                    modifyOrder={modifyOrder}
+                    orderType={orderType}
+                />}
+            {customerSearchActive ?
+                <CustomerSearchPanel
+                    onSearch={customerSearch}
+                /> : null}
+            {customerEditActive ?
+                <CustomerEditPanel
+                    customer={customer}
+                    openOrder={openOrder}
+                    user={props.user}
+                /> : null}
         </div>
     );
 }

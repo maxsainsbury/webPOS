@@ -4,18 +4,18 @@ const {intToBool, boolToInt} = require('../helpers/helperFunctions.js');
 //function to search for a order by the id
 const selectOrderById = async (orderId) => {
     try {
-        let order = await pool.query(
+        let [rows] = await pool.query(
             `SELECT * FROM orders WHERE order_id = ?`,
             [orderId]
         );
-        order = order[0];
+        let order = rows[0];
         order.is_future_order = intToBool(order.is_future_order);
         order.in_use = intToBool(order.in_use);
-        let items = await pool.query(
+        [rows] = await pool.query(
             `SELECT * FROM order_items WHERE order_id = ?`,
             [orderId]
         );
-        items = items[0];
+        let items = rows;
         for(let i = 0; i < items.length; i++) {
             let mods = await pool.query(
                 `SELECT * FROM webpos_db.order_items_mods WHERE order_items_id = ?`,

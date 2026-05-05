@@ -47,14 +47,57 @@ export const getOrderById = async (orderId) => {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderId)
+            }
         });
         if(response.ok) {
             return await response.json();
         }
         else {
             console.log("Error fetching orders by order id");
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+export const updateOrder = async (order) => {
+    try {
+        const response = await fetch(`${getApiUrl()}/orders/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order)
+        });
+        if(response.ok) {
+            return await response.json();
+        }
+        else {
+            console.log("Error updating order");
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+export const addOrder = async (order) => {
+    try {
+        const response = await fetch(`${getApiUrl()}/orders/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order)
+        });
+        if(response.ok) {
+            return await response.json();
+        }
+        else {
+            console.log("Error adding order");
             return null;
         }
     } catch (error) {

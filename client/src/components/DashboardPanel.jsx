@@ -2,7 +2,6 @@ import './DashboardPanel.css';
 import TouchBtn from "./TouchBtn.jsx";
 
 const DashboardPanel = (props) => {
-
     return (
         <div id="dashboardPanel">
             {props.orders.map((order) => {
@@ -13,7 +12,7 @@ const DashboardPanel = (props) => {
                         key={order.order_id}
                         name={customer.f_name + " " + customer.l_name}
                         className="rectangle orderBtn"
-                        onClick={() => props.openOrder(customer, order)}
+                        onClick={() => props.openOrder(customer, order.order_id)}
                     />
                 );
             })}

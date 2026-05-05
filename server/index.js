@@ -540,7 +540,7 @@ app.post('/order/update/inuse', async (req, res) => {
         const results = await updateInUse(req.body.order_id, req.body.in_use);
         if(results) {
             if(results.affectedRows > 0) {
-                res.status(201).send();
+                res.status(201).json(results);
             }
             else {
                 res.status(400).json({error: 'Could not update in use status'});
