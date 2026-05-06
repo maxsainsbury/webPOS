@@ -4,7 +4,7 @@ import TouchBtn from "./TouchBtn.jsx";
 import {formatPhone} from "../helpers/helperFunctions.js";
 import {addCustomer, updateCustomer} from "../api/customer.js";
 import {digitsOnly} from "../helpers/regex.js";
-import {useEffect} from "react";
+import {useCallback, useEffect} from "react";
 
 const CustomerEditPanel = (props) => {
 
@@ -30,7 +30,7 @@ const CustomerEditPanel = (props) => {
         }
     }
 
-    const updateOrAdd = async () => {
+    const updateOrAdd = useCallback(async () => {
         try {
             if(customer.f_name) {
                 let changed = false;
@@ -47,22 +47,27 @@ const CustomerEditPanel = (props) => {
                         addCustomer(customer);
                     }
                 }
+                const currentDateTime = new Date();
                 props.openOrder(customer, {
                     order_id: 0,
                     customer_id: customer.customer_id,
                     user_id: props.user.user_id,
                     order_number: 1,
                     order_type: props.order_type,
-                    order_status: "pending",
+                    order_status: "Pending",
                     is_future_order: false,
-                    in_use: false,
+                    scheduled_date: `${currentDateTime.getFullYear()}-${currentDateTime.getMonth() + 1}-${currentDateTime.getDate()}`,
+                    scheduled_time: `${currentDateTime.getHours()}:${currentDateTime.getMinutes()}:00`,
+                    payment_status: "Pending",
+                    special_instructions: "none",
+                    in_use: true,
                 });
             }
         }
         catch(error) {
             console.log(error.message);
         }
-    }
+    }, [customer, props.customer, props.openOrder, props.user.user_id, props.order_type]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {

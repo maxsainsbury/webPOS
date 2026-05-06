@@ -41,9 +41,9 @@ export const getOrdersByPaymentStatus = async (paymentStatus) => {
     }
 }
 
-export const getOrderById = async (orderId) => {
+export const getOrderById = async (order) => {
     try {
-        const response = await fetch(`${getApiUrl()}/orders/${orderId}`, {
+        const response = await fetch(`${getApiUrl()}/orders/${order.order_id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export const getOrderById = async (orderId) => {
 
 export const updateOrder = async (order) => {
     try {
-        const response = await fetch(`${getApiUrl()}/orders/add`, {
+        const response = await fetch(`${getApiUrl()}/order/update`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -72,21 +72,22 @@ export const updateOrder = async (order) => {
             body: JSON.stringify(order)
         });
         if(response.ok) {
-            return await response.json();
+            return true;
         }
         else {
             console.log("Error updating order");
-            return null;
+            return false;
         }
     } catch (error) {
         console.log(error);
-        return null;
+        return false;
     }
 }
 
 export const addOrder = async (order) => {
     try {
-        const response = await fetch(`${getApiUrl()}/orders/add`, {
+        console.log(order);
+        const response = await fetch(`${getApiUrl()}/order/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

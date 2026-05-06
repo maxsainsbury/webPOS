@@ -222,8 +222,6 @@ CREATE TABLE IF NOT EXISTS `webpos_db`.`order_items` (
   `order_id` INT NOT NULL,
   `item_id` INT NOT NULL,
   `quantity` INT NOT NULL,
-  `unit_price` DECIMAL(6,2) NOT NULL,
-  `line_total` DECIMAL(7,2) NOT NULL,
   PRIMARY KEY (`order_items_id`),
   INDEX `order_fk_idx` (`order_id` ASC) VISIBLE,
   INDEX `item_fk_idx` (`item_id` ASC) VISIBLE,

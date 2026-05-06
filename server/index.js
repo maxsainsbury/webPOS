@@ -506,7 +506,7 @@ app.post('/order/update', async (req, res) => {
     try {
         const results = await updateOrder(req.body);
         if(results) {
-            if(results.affectedRows > 0) {
+            if(results) {
                 res.status(201).send();
             }
             else {

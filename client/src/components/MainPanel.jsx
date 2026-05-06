@@ -8,7 +8,7 @@ import CustomerSearchPanel from "./CustomerSearchPanel.jsx";
 import {useCustomer} from "../hooks/useCustomer.js";
 import CustomerEditPanel from "./CustomerEditPanel.jsx";
 import {usePendingOrders} from "../hooks/useOrders.js";
-import {getOrderById, getOrdersByPaymentStatus, updateInUse} from "../api/orders.js";
+import {addOrder, getOrderById, getOrdersByPaymentStatus, updateInUse, updateOrder} from "../api/orders.js";
 import {getCustomerById} from "../api/customer.js";
 import {useItems} from "../hooks/useItems.js";
 import {getItems} from "../api/items.js";
@@ -56,32 +56,48 @@ const MainPanel = (props) => {
         }
     }
 
-    const openOrder = async (customer, orderId) => {
-        const fetchedOrder = await getOrderById(orderId);
-        if (!fetchedOrder) return;
-        if(fetchedOrder.order.in_use) {
-            const proceed = await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {
-                title: 'Order in use',
-                kind: 'warning',
-                cancelLabel: 'Go Back',
-                okLabel: 'Open Order'
-            });
-            if (!proceed) return;
+    const openOrder = async (customer, order) => {
+        let fetchedOrder;
+        if (order.order_id > 0) {
+            fetchedOrder = await getOrderById(order);
+            if (!fetchedOrder) return;
+            console.log(fetchedOrder);
+            if (fetchedOrder.order.in_use) {
+                const proceed = await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {
+                    title: 'Order in use',
+                    kind: 'warning',
+                    cancelLabel: 'Go Back',
+                    okLabel: 'Open Order'
+                });
+                if (!proceed) return;
+            } else {
+                fetchedOrder.order.in_use = true;
+                await updateInUse(fetchedOrder.order);
+            }
         }
         else {
-            fetchedOrder.order.in_use = true;
-            await updateInUse(fetchedOrder.order);
+            fetchedOrder = {order: order, items: [], mods: []};
         }
         setCustomerEditActive(false);
         setCustomer(customer);
         setCurrentOrder(fetchedOrder);
         setModifiedOrder(fetchedOrder);
         setActiveView('order');
+
     }
 
-    const saveOrder = async (order) => {
-        console.log(order);
-        console.log(customer);
+    const saveOrder = async (fullOrder) => {
+
+
+        let response;
+        if(fullOrder.order.order_id > 0) {
+            response = await updateOrder(fullOrder);
+            console.log(response);
+        }
+        else {
+            response = await addOrder(fullOrder)
+            console.log(response);
+        }
     }
 
     const modifyOrder = (item, editType) => {
@@ -89,7 +105,7 @@ const MainPanel = (props) => {
             case 'add':
                 setModifiedOrder(prev => ({
                     ...prev,
-                    items: [...(prev.items ?? []), item]
+                    items: [...(prev.items ?? []), {...item, quantity: 1}]
                 }));
                 break;
             case 'delete':

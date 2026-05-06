@@ -88,21 +88,27 @@ const selectOrdersByPaymentStatus = async (paymentStatus) => {
 //function to add a order to the database
 const addOrder = async (fullOrder) => {
     try {
-        const {order, items} = fullOrder;
+        let {order, items} = fullOrder;
+        console.log(order, items);
         order.is_future_order = boolToInt(order.is_future_order);
         order.in_use = boolToInt(order.in_use);
         const [orderResults] = await pool.query(
             `INSERT INTO orders 
-            (customer_id, user_id, order_number, order_type, order_status, is_future_order, scheduled_date, scheduled_time, subtotal, tax_amount, payment_status, special_instructions)
-            VALUE (?, ?, ?, ?, 'Scheduled', ?, ?, ?, ?, ?, ?, ?)`,
-            [order.customer_id, order.user_id, order.order_number, order.order_type, order.is_future_order, order.scheduled_date, order.scheduled_time, order.subtotal, order.tax_amount, order.payment_status. order.special_instructions]
+            (customer_id, user_id, order_number, order_type, order_status, is_future_order, scheduled_date, scheduled_time, payment_status, special_instructions)
+            VALUE (?, ?, ?, ?, 'Scheduled', ?, ?, ?, ?, ?)`,
+            [order.customer_id, order.user_id, order.order_number, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.payment_status. order.special_instructions]
         );
-        const [orderItemResults] = await pool.query(
-            `INSERT INTO order_items
-            (order_id, item_id, quantity)
-            VALUE (?, ?, ?)`,
-            [order.order_id, items.item_id, items.quantity]
-        )
+        console.log(orderResults);
+        let orderItemResults = [];
+        for (let i = 0; i < items.length; i++) {
+            const [results] = await pool.query(
+                `INSERT INTO order_items
+                     (order_id, item_id, quantity)
+                     VALUE (?, ?, ?)`,
+                [order.order_id, items[i].item_id, items[i].quantity]
+            );
+            orderItemResults.push(results);
+        }
         return {order: orderResults, items: orderItemResults};
     } catch (error) {
         console.log(error.message);
@@ -112,24 +118,36 @@ const addOrder = async (fullOrder) => {
 //function to update an order in the database
 const updateOrder = async (fullOrder) => {
     try {
-        const {order, items} = fullOrder;
+        let {order, items} = fullOrder;
         order.is_future_order = boolToInt(order.is_future_order);
         order.in_use = boolToInt(order.in_use);
-        const [orderResults] = await pool.query(
+        await pool.query(
             `UPDATE orders
-            SET customer_id = ?, user_id = ?, order_number = ?, order_type = ?, order_status = ?, is_future_order = ?, scheduled_date = ?, scheduled_time = ?, subtotal = ?, tax_amount = ?, tip_amount = ?, payment_status = ?, special_instructions = ?
+            SET customer_id = ?, user_id = ?, order_number = ?, order_type = ?, order_status = ?, is_future_order = ?, scheduled_date = ?, scheduled_time = ?, payment_status = ?, special_instructions = ?
             WHERE order_id = ?`,
-            [order.customer_id, order.user_id, order.order_number, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.subtotal, order.tax_amount, order.tip_amount, order.payment_status, order.special_instructions, order.order_id]
+            [order.customer_id, order.user_id, order.order_number, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.payment_status, order.special_instructions, order.order_id]
         );
-        const [orderItemResults] = await pool.query(
-            `UPDATE order_items
-            SET item_id=?, quantity=?
-            WHERE order_id=?`,
-            [items.item_id, items.quantity, order.order_id]
-        )
-        return {order: orderResults, items: orderItemResults};
+
+        const [deleteResult] = await pool.query(
+            `DELETE FROM order_items 
+            WHERE order_id = ?`,
+            [order.order_id]);
+
+        for (let i = 0; i < items.length; i++) {
+            console.log(`inserting item:`, order.order_id, items[i].item_id, items[i].quantity);
+            const [result] = await pool.query(
+                `INSERT INTO order_items
+                 SET item_id = ?,
+                     quantity = ?,
+                     order_id = ?`,
+                [items[i].item_id, items[i].quantity, order.order_id]
+            );
+            console.log(`insert result:`, result.affectedRows, result.insertId);
+        }
+        return true;
     } catch (error) {
         console.log(error.message);
+        return false;
     }
 }
 
