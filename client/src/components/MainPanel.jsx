@@ -31,21 +31,24 @@ const MainPanel = (props) => {
 
     const {items, setItems} = useItems(getItems);
 
+    const loadCustomers = async (updatedOrders = orders) => {
+        const customerIds= updatedOrders.map(order => order.customer_id);
+        const data = await getCustomerById(customerIds);
+        if (data) {
+            setCustomers(data);
+        }
+    }
+
     useEffect(() => {
-        const loadCustomers = async () => {
+        const initialLoadCustomers = async () => {
             if (orders.length === 0) {
                 setActiveView('dashboard');
                 return;
             }
-
-            const customerIds= orders.map(order => order.customer_id);
-            const data = await getCustomerById(customerIds);
-            if (data) {
-                setCustomers(data);
-                setActiveView('dashboard');
-            }
+            loadCustomers();
+            setActiveView('dashboard');
         }
-        loadCustomers();
+        initialLoadCustomers();
     }, [orders]);
 
     const customerSearch = (searchedCustomer) => {
@@ -61,7 +64,6 @@ const MainPanel = (props) => {
         if (order.order_id > 0) {
             fetchedOrder = await getOrderById(order);
             if (!fetchedOrder) return;
-            console.log(fetchedOrder);
             if (fetchedOrder.order.in_use) {
                 const proceed = await confirm('The order is probably open on another machine, in order to not lose changes please close on the other machine, if this is an error you can open anyway', {
                     title: 'Order in use',
@@ -88,16 +90,19 @@ const MainPanel = (props) => {
 
     const saveOrder = async (fullOrder) => {
 
-
-        let response;
         if(fullOrder.order.order_id > 0) {
-            response = await updateOrder(fullOrder);
-            console.log(response);
+            await updateOrder(fullOrder);
         }
         else {
-            response = await addOrder(fullOrder)
-            console.log(response);
+            const response = await addOrder(fullOrder);
+            fullOrder.order.order_id = response.order.insertId;
         }
+        fullOrder.order.in_use = false;
+        await updateInUse(fullOrder.order);
+        const updatedOrders = await fetchOrders();
+        setOrders(updatedOrders);
+        await loadCustomers(updatedOrders);
+        setActiveView('dashboard');
     }
 
     const modifyOrder = (item, editType) => {
@@ -155,6 +160,7 @@ const MainPanel = (props) => {
                     customer={customer}
                     openOrder={openOrder}
                     user={props.user}
+                    orderType={orderType}
                 /> : null}
         </div>
     );

@@ -294,7 +294,7 @@ app.post('/customers/add', async (req, res) => {
         if(results) {
             //if the customers inf o was changed
             if (results.affectedRows > 0) {
-                res.status(201).send();
+                res.status(201).json(results);
             } else {
                 res.status(400).json({error: 'Could not add Customers'});
             }
@@ -487,8 +487,8 @@ app.post('/order/add', async (req, res) => {
     try {
         const results = await addOrder(req.body);
         if(results) {
-            if (results.affectedRows > 0) {
-                res.status(201).send();
+            if (results.order.affectedRows > 0) {
+                res.status(201).json(results);
             }
             else {
                 res.status(400).json({error: 'Could not add Order'});

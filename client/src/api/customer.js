@@ -70,7 +70,11 @@ export const addCustomer = async (customer) => {
             },
             body: JSON.stringify(customer)
         });
-        return response.ok;
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.insertId);
+            return data;
+        }
     } catch (error) {
         console.log(error);
         return false;

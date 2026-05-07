@@ -41,23 +41,29 @@ const CustomerEditPanel = (props) => {
                 });
                 if(changed) {
                     if(customer.customer_id > 0) {
-                        updateCustomer(customer);
+                        customer.phone = customer.phone.replace(digitsOnly, "");
+                        await updateCustomer(customer);
                     }
                     else {
-                        addCustomer(customer);
+                        customer.phone = customer.phone.replace(digitsOnly, "");
+                        const customerResponse = await addCustomer(customer);
+                        customer.customer_id = customerResponse.insertId
+                        console.log(customerResponse);
                     }
                 }
                 const currentDateTime = new Date();
+                const scheduledDate = currentDateTime.toISOString().slice(0, 10);
+                const scheduledTime = `${String(currentDateTime.getHours()).padStart(2, '0')}:${String(currentDateTime.getMinutes()).padStart(2, '0')}:00`;
                 props.openOrder(customer, {
                     order_id: 0,
                     customer_id: customer.customer_id,
-                    user_id: props.user.user_id,
+                    employee_id: props.user.employee_id,
                     order_number: 1,
-                    order_type: props.order_type,
+                    order_type: props.orderType,
                     order_status: "Pending",
                     is_future_order: false,
-                    scheduled_date: `${currentDateTime.getFullYear()}-${currentDateTime.getMonth() + 1}-${currentDateTime.getDate()}`,
-                    scheduled_time: `${currentDateTime.getHours()}:${currentDateTime.getMinutes()}:00`,
+                    scheduled_date: scheduledDate,
+                    scheduled_time: scheduledTime,
                     payment_status: "Pending",
                     special_instructions: "none",
                     in_use: true,
@@ -67,7 +73,7 @@ const CustomerEditPanel = (props) => {
         catch(error) {
             console.log(error.message);
         }
-    }, [customer, props.customer, props.openOrder, props.user.user_id, props.order_type]);
+    }, [customer, props.customer, props.openOrder, props.user.employee_id, props.order_type]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {

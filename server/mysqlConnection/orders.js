@@ -12,7 +12,10 @@ const selectOrderById = async (orderId) => {
         order.is_future_order = intToBool(order.is_future_order);
         order.in_use = intToBool(order.in_use);
         [rows] = await pool.query(
-            `SELECT * FROM order_items WHERE order_id = ?`,
+            `SELECT oi.*, i.item_name
+            FROM order_items oi 
+            JOIN items i USING(item_id)
+            WHERE oi.order_id = ?`,
             [orderId]
         );
         let items = rows;
@@ -89,16 +92,15 @@ const selectOrdersByPaymentStatus = async (paymentStatus) => {
 const addOrder = async (fullOrder) => {
     try {
         let {order, items} = fullOrder;
-        console.log(order, items);
         order.is_future_order = boolToInt(order.is_future_order);
         order.in_use = boolToInt(order.in_use);
         const [orderResults] = await pool.query(
             `INSERT INTO orders 
-            (customer_id, user_id, order_number, order_type, order_status, is_future_order, scheduled_date, scheduled_time, payment_status, special_instructions)
-            VALUE (?, ?, ?, ?, 'Scheduled', ?, ?, ?, ?, ?)`,
-            [order.customer_id, order.user_id, order.order_number, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.payment_status. order.special_instructions]
+            (customer_id, employee_id, order_type, order_status, is_future_order, scheduled_date, scheduled_time, payment_status, special_instructions)
+            VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [order.customer_id, order.employee_id, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.payment_status, order.special_instructions]
         );
-        console.log(orderResults);
+        order.order_id = orderResults.insertId
         let orderItemResults = [];
         for (let i = 0; i < items.length; i++) {
             const [results] = await pool.query(
@@ -123,9 +125,9 @@ const updateOrder = async (fullOrder) => {
         order.in_use = boolToInt(order.in_use);
         await pool.query(
             `UPDATE orders
-            SET customer_id = ?, user_id = ?, order_number = ?, order_type = ?, order_status = ?, is_future_order = ?, scheduled_date = ?, scheduled_time = ?, payment_status = ?, special_instructions = ?
+            SET customer_id = ?, employee_id = ?, order_type = ?, order_status = ?, is_future_order = ?, scheduled_date = ?, scheduled_time = ?, payment_status = ?, special_instructions = ?
             WHERE order_id = ?`,
-            [order.customer_id, order.user_id, order.order_number, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.payment_status, order.special_instructions, order.order_id]
+            [order.customer_id, order.employee_id, order.order_type, order.order_status, order.is_future_order, order.scheduled_date, order.scheduled_time, order.payment_status, order.special_instructions, order.order_id]
         );
 
         const [deleteResult] = await pool.query(
@@ -134,7 +136,6 @@ const updateOrder = async (fullOrder) => {
             [order.order_id]);
 
         for (let i = 0; i < items.length; i++) {
-            console.log(`inserting item:`, order.order_id, items[i].item_id, items[i].quantity);
             const [result] = await pool.query(
                 `INSERT INTO order_items
                  SET item_id = ?,
@@ -142,7 +143,6 @@ const updateOrder = async (fullOrder) => {
                      order_id = ?`,
                 [items[i].item_id, items[i].quantity, order.order_id]
             );
-            console.log(`insert result:`, result.affectedRows, result.insertId);
         }
         return true;
     } catch (error) {

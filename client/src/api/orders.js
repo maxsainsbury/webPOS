@@ -64,6 +64,7 @@ export const getOrderById = async (order) => {
 
 export const updateOrder = async (order) => {
     try {
+        order.order.scheduled_date = new Date(order.order.scheduled_date).toISOString().slice(0,10);
         const response = await fetch(`${getApiUrl()}/order/update`, {
             method: "POST",
             headers: {
@@ -86,7 +87,6 @@ export const updateOrder = async (order) => {
 
 export const addOrder = async (order) => {
     try {
-        console.log(order);
         const response = await fetch(`${getApiUrl()}/order/add`, {
             method: "POST",
             headers: {
