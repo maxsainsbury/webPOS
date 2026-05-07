@@ -185,8 +185,7 @@ DROP TABLE IF EXISTS `webpos_db`.`orders` ;
 CREATE TABLE IF NOT EXISTS `webpos_db`.`orders` (
   `order_id` INT NOT NULL AUTO_INCREMENT,
   `customer_id` INT NULL,
-  `user_id` INT NOT NULL,
-  `order_number` INT NOT NULL,
+  `employee_id` INT NOT NULL,
   `order_type` ENUM('Quick Sale', 'WalkIn', 'Pickup', 'Delivery') NOT NULL,
   `order_status` ENUM('Scheduled', 'Pending', 'Preparing', 'Ready', 'Out for Delivery', 'Completed', 'Cancelled') NULL,
   `is_future_order` TINYINT(1) NULL,
@@ -197,15 +196,14 @@ CREATE TABLE IF NOT EXISTS `webpos_db`.`orders` (
   `in_use` TINYINT(1) NULL,
   PRIMARY KEY (`order_id`),
   INDEX `customer_fk_idx` (`customer_id` ASC) VISIBLE,
-  INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-  UNIQUE INDEX `order_number_UNIQUE` (`order_number` ASC) VISIBLE,
+  INDEX `employee_id_idx` (`employee_id` ASC) VISIBLE,
   CONSTRAINT `customer_id_fk`
     FOREIGN KEY (`customer_id`)
     REFERENCES `webpos_db`.`customers` (`customer_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `employee_id_fk`
-    FOREIGN KEY (`user_id`)
+    FOREIGN KEY (`employee_id`)
     REFERENCES `webpos_db`.`employee` (`employee_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
