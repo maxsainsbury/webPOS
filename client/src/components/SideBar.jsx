@@ -63,10 +63,32 @@ const SideBar = (props) => {
                             </div>
                         </div>
                         <div id="orderBtns">
-                            <TouchBtn name="Modify" className="rectangle sidebarBtn" />
-                            <TouchBtn name="Delete" className="rectangle sidebarBtn" onClick={() => props.modifyOrder(selectedItem, 'delete')} />
-                            <TouchBtn name="Payment" className="rectangle sidebarBtn" />
-                            <TouchBtn name="Save" className="rectangle sidebarBtn" onClick={() => props.saveOrder(props.modifiedOrder)} />
+                            <TouchBtn
+                                name="Modify"
+                                className="rectangle sidebarBtn"
+                            />
+
+                            <TouchBtn
+                                name="Delete"
+                                className="rectangle sidebarBtn"
+                                onClick={() => {
+                                    props.modifyOrder(selectedItem, 'delete');
+                                    setSelectedItem(null);
+                                }}
+                            />
+
+                            <TouchBtn
+                                name="Payment"
+                                className="rectangle sidebarBtn"
+                            />
+
+                            <TouchBtn
+                                name="Save"
+                                className="rectangle sidebarBtn"
+                                onClick={() => props.saveOrder(props.modifiedOrder)}
+                            />
+
+
                         </div>
                     </div>
                     : null
