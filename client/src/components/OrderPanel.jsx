@@ -11,9 +11,17 @@ const OrderPanel = (props) => {
     return (
         <div id="orderPanel">
             <div id="categories">
-                {categories.map(category => (
-                    <TouchBtn key={category.category_id} name={category.category_name} className="categoryBtn rectangle" onClick={() => setCurrentCategoryId(category.category_id)}></TouchBtn>
-                ))}
+                {categories
+                    .filter(category => props.items.some(item => item.category_id === category.category_id))
+                    .map(category => (
+                        <TouchBtn
+                            key={category.category_id}
+                            name={category.category_name}
+                            className="categoryBtn rectangle"
+                            onClick={() => setCurrentCategoryId(category.category_id)}>
+                        </TouchBtn>
+                    )
+                )}
             </div>
             <div id="order-items">
                 {props.items
