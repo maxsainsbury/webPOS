@@ -116,7 +116,7 @@ const MainPanel = (props) => {
             case 'delete':
                 setModifiedOrder(prev => ({
                     ...prev,
-                    items: prev.items.filter(i => i.order_item_id !== item.order_item_id)
+                    items: prev.items.splice(item, 1)
                 }));
                 break;
         }

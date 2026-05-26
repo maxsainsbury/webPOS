@@ -2,11 +2,12 @@ import './SideBar.css';
 import {useOrderTypes} from "../hooks/useOrders.js";
 import {getOrderTypes} from "../api/orders.js";
 import TouchBtn from "./TouchBtn.jsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 const SideBar = (props) => {
     const { orderTypes, setOrderTypes } = useOrderTypes();
-    let selectedItem = {}
+    const [selectedItem, setSelectedItem] = useState(null);
+
     useEffect(() => {
         getOrderTypes().then(setOrderTypes);
     }, [setOrderTypes]);
@@ -37,7 +38,10 @@ const SideBar = (props) => {
                         <div id="orderInfo">
                             <div id="sidebar-items">
                                 {props.modifiedOrder.items?.map((item, index) => (
-                                    <div key={index} className="item">
+                                    <div
+                                        key={index}
+                                        className={`item ${selectedItem === index ? 'selected' : ''}`}
+                                        onClick={() => setSelectedItem(index)}>
                                         <p>{item.item_name}</p>
                                         <p>{item.item_price}</p>
                                     </div>
