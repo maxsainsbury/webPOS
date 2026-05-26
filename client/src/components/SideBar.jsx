@@ -85,7 +85,10 @@ const SideBar = (props) => {
                             <TouchBtn
                                 name="Save"
                                 className="rectangle sidebarBtn"
-                                onClick={() => props.saveOrder(props.modifiedOrder)}
+                                onClick={() => {
+                                    props.saveOrder(props.modifiedOrder);
+                                    setSelectedItem(null);
+                                }}
                             />
 
 
