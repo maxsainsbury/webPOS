@@ -1,103 +1,122 @@
-import './SideBar.css';
-import {useOrderTypes} from "../hooks/useOrders.js";
-import {getOrderTypes} from "../api/orders.js";
+import "./SideBar.css";
+import { useOrderTypes } from "../hooks/useOrders.js";
+import { getOrderTypes } from "../api/orders.js";
 import TouchBtn from "./TouchBtn.jsx";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 const SideBar = (props) => {
-    const { orderTypes, setOrderTypes } = useOrderTypes();
-    const [selectedItem, setSelectedItem] = useState(null);
+  //variable to store the order types
+  const { orderTypes, setOrderTypes } = useOrderTypes();
+  //variable to store the selected item in the sidebar
+  const [selectedItem, setSelectedItem] = useState(null);
 
-    useEffect(() => {
-        getOrderTypes().then(setOrderTypes);
-    }, [setOrderTypes]);
+  //function to get the order types from the database
+  useEffect(() => {
+    getOrderTypes().then(setOrderTypes);
+  }, [setOrderTypes]);
 
-    return (
-        <div id="sideBar">
-            {
-                (props.activeView === 'dashboard') ? orderTypes.map((orderType, index) => (
-                    <TouchBtn
-                        key={index}
-                        name={orderType}
-                        className="rectangle sidebarBtn"
-                        onClick={() => {
-                            if (orderType === "Delivery" || orderType === "Pickup") {
-                                props.setOrderType(orderType);
-                                props.onOrder(true)
-                            }
-                            else {
-                                props.onOrder(false)
-                            }
-                        }}
-                    />
-                )) : null
-            }
-            {
-                (props.activeView === 'order') ?
-                    <div id="orderSidebar">
-                        <div id="orderInfo">
-                            <div id="sidebar-items">
-                                {props.modifiedOrder.items?.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className={`item ${selectedItem === index ? 'selected' : ''}`}
-                                        onClick={() => setSelectedItem(index)}>
-                                        <p>{item.item_name}</p>
-                                        <p>{item.item_price}</p>
-                                    </div>
-                                ))}
-                            </div>
-                            <div id="paymentInfo">
-                                <div id="subtotal" className="paymentGroup">
-                                    <p id="subtotalName">Subtotal: </p>
-                                    <p id="subtotalValue">{props.order.subtotal ? new Intl.NumberFormat('en-CA', {style: "currency", currency: "CAD" }).format(props.order.subtotal) : "$0.00"}</p>
-                                </div>
-                                <div id="tax" className="paymentGroup">
-                                    <p id="taxName">Tax: </p>
-                                    <p id="taxValue">{props.order.tax_amount ? new Intl.NumberFormat('en-CA', {style: "currency", currency: "CAD" }).format(props.order.tax_amount) : "$0.00"}</p>
-                                </div>
-                                <div id="total" className="paymentGroup">
-                                    <p id="totalName">Total: </p>
-                                    <p id="totalValue">{props.order.subtotal || props.order.tax_amount ? new Intl.NumberFormat('en-CA', {style: "currency", currency: "CAD" }).format(parseInt(props.order.subtotal) + parseInt(props.order.tax_amount)) : "$0.00"}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="orderBtns">
-                            <TouchBtn
-                                name="Modify"
-                                className="rectangle sidebarBtn"
-                            />
+  return (
+    <div id="sideBar">
+      {/* if the active view is dashboard, display buttons to select a order type for a new order */}
+      {props.activeView === "dashboard"
+        ? orderTypes.map((orderType, index) => (
+            <TouchBtn
+              key={index}
+              name={orderType}
+              className="rectangle sidebarBtn"
+              onClick={() => {
+                if (orderType === "Delivery" || orderType === "Pickup") {
+                  props.setOrderType(orderType);
+                  props.onOrder(true);
+                } else {
+                  props.onOrder(false);
+                }
+              }}
+            />
+          ))
+        : null}
+      {/* if the active view is order, display the current order, and buttons to modify of save the order */}
+      {props.activeView === "order" ? (
+        <div id="orderSidebar">
+          <div id="orderInfo">
+            <div id="sidebar-items">
+              {props.modifiedOrder.items?.map((item, index) => (
+                <div
+                  key={index}
+                  className={`item ${selectedItem === index ? "selected" : ""}`}
+                  onClick={() => setSelectedItem(index)}
+                >
+                  <p>{item.item_name}</p>
+                  <p>{item.item_price}</p>
+                </div>
+              ))}
+            </div>
+            <div id="paymentInfo">
+              <div id="subtotal" className="paymentGroup">
+                <p id="subtotalName">Subtotal: </p>
+                <p id="subtotalValue">
+                  {props.order.subtotal
+                    ? new Intl.NumberFormat("en-CA", {
+                        style: "currency",
+                        currency: "CAD",
+                      }).format(props.order.subtotal)
+                    : "$0.00"}
+                </p>
+              </div>
+              <div id="tax" className="paymentGroup">
+                <p id="taxName">Tax: </p>
+                <p id="taxValue">
+                  {props.order.tax_amount
+                    ? new Intl.NumberFormat("en-CA", {
+                        style: "currency",
+                        currency: "CAD",
+                      }).format(props.order.tax_amount)
+                    : "$0.00"}
+                </p>
+              </div>
+              <div id="total" className="paymentGroup">
+                <p id="totalName">Total: </p>
+                <p id="totalValue">
+                  {props.order.subtotal || props.order.tax_amount
+                    ? new Intl.NumberFormat("en-CA", {
+                        style: "currency",
+                        currency: "CAD",
+                      }).format(
+                        parseInt(props.order.subtotal) +
+                          parseInt(props.order.tax_amount),
+                      )
+                    : "$0.00"}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div id="orderBtns">
+            <TouchBtn name="Modify" className="rectangle sidebarBtn" />
 
-                            <TouchBtn
-                                name="Delete"
-                                className="rectangle sidebarBtn"
-                                onClick={() => {
-                                    props.modifyOrder(selectedItem, 'delete');
-                                    setSelectedItem(null);
-                                }}
-                            />
+            <TouchBtn
+              name="Delete"
+              className="rectangle sidebarBtn"
+              onClick={() => {
+                props.modifyOrder(selectedItem, "delete");
+                setSelectedItem(null);
+              }}
+            />
 
-                            <TouchBtn
-                                name="Payment"
-                                className="rectangle sidebarBtn"
-                            />
+            <TouchBtn name="Payment" className="rectangle sidebarBtn" />
 
-                            <TouchBtn
-                                name="Save"
-                                className="rectangle sidebarBtn"
-                                onClick={() => {
-                                    props.saveOrder(props.modifiedOrder);
-                                    setSelectedItem(null);
-                                }}
-                            />
-
-
-                        </div>
-                    </div>
-                    : null
-            }
+            <TouchBtn
+              name="Save"
+              className="rectangle sidebarBtn"
+              onClick={() => {
+                props.saveOrder(props.modifiedOrder);
+                setSelectedItem(null);
+              }}
+            />
+          </div>
         </div>
-    )
-}
+      ) : null}
+    </div>
+  );
+};
 
-export default SideBar
+export default SideBar;

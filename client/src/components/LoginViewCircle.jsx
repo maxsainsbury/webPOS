@@ -1,11 +1,8 @@
-import './LoginViewCircles.css';
+import "./LoginViewCircles.css";
 
 const LoginViewCircle = (props) => {
-
-    return (
-        <div className={props.className +' viewCircle'}>
-        </div>
-    );
-}
+  //create a component that has a default class of viewCircle
+  return <div className={props.className + " viewCircle"}></div>;
+};
 
 export default LoginViewCircle;
