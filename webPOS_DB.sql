@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `webpos_db`.`mods` (
   `mod_id` INT NOT NULL AUTO_INCREMENT,
   `mod_name` VARCHAR(50) NULL,
   `category_id` INT NOT NULL,
-  `is_available` BIT(1) NULL,
+  `is_available` TINYINT(1) NULL,
   PRIMARY KEY (`mod_id`),
   INDEX `category_fk_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_mod_fk`
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `webpos_db`.`order_items` (
   CONSTRAINT `order_items_order_fk`
     FOREIGN KEY (`order_id`)
     REFERENCES `webpos_db`.`orders` (`order_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `order_items_item_fk`
     FOREIGN KEY (`item_id`)
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS `webpos_db`.`order_items_mods` (
   CONSTRAINT `order_items_fk`
     FOREIGN KEY (`order_items_id`)
     REFERENCES `webpos_db`.`order_items` (`order_items_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `order_items_mods_mod_fk`
     FOREIGN KEY (`mod_id`)
