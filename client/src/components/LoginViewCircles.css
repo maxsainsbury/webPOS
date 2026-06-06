@@ -11,12 +11,11 @@
 }
 
 .dark {
-
     background-color: #1a1a1a;
     border-color: #000000;
 }
 
 .light {
-    background-color: #DADADA;
+    background-color: #dadada;
     border-color: #999999;
 }

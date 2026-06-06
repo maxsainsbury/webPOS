@@ -4,13 +4,13 @@
     height: auto;
     padding: 0.5em;
     background: #1a1a1a;
-    border-bottom:5px solid #000000;
+    border-bottom: 5px solid #000000;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 1em;
 }
 
-#topbar .topbarBtn .btnTitle{
+#topbar .topbarBtn .btnTitle {
     font-size: 1.3em;
     font-weight: 350;
 }

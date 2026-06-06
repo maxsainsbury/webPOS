@@ -1,64 +1,70 @@
-import './CustomerSearchPanel.css'
-import {useEffect, useState} from "react";
+import "./CustomerSearchPanel.css";
+import { useEffect, useState } from "react";
 import TouchBtn from "./TouchBtn.jsx";
-import {getCustomerByPhone} from "../api/customer.js";
-import {formatPhone} from "../helpers/helperFunctions.js";
-import {digitsOnly} from "../helpers/regex.js";
+import { getCustomerByPhone } from "../api/customer.js";
+import { formatPhone } from "../helpers/helperFunctions.js";
+import { digitsOnly } from "../helpers/regex.js";
 
 const CustomerSearchPanel = (props) => {
-    const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
 
-    const handleChange = (event) => {
-        setPhone(formatPhone(event.target.value));
+  const handleChange = (event) => {
+    setPhone(formatPhone(event.target.value));
+  };
+
+  const searchCustomers = async () => {
+    let customer = await getCustomerByPhone(phone.replace(digitsOnly, ""));
+    if (!customer) {
+      customer = {
+        customer_id: 0,
+        f_name: "",
+        l_name: "",
+        phone: phone,
+        email: "",
+        address_line1: "",
+        address_line2: "",
+        city: "",
+        provence: "",
+        postal_code: "",
+        delivery_instructions: "",
+      };
     }
+    props.onSearch(customer);
+  };
 
-    const searchCustomers = async () => {
-        let customer = await getCustomerByPhone(phone.replace(digitsOnly, ''));
-        if(!customer) {
-            customer = {
-                customer_id: 0,
-                f_name: "",
-                l_name: "",
-                phone: phone,
-                email: "",
-                address_line1: "",
-                address_line2: "",
-                city: "",
-                provence: "",
-                postal_code: "",
-                delivery_instructions: ""
-            }
-        }
-        props.onSearch(customer);
-    }
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        searchCustomers();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [searchCustomers]);
 
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'Enter') {
-                searchCustomers();
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [searchCustomers])
-
-
-    return (
-        <div id="darkenBackground">
-            <div id="customerSearchPanel">
-                <div id="searchBox">
-                    <label htmlFor="phone">Phone Number:</label>
-                    <input type="text" id="phone" placeholder="(   )   -    " value={phone} onChange={handleChange}/>
-                </div>
-                <TouchBtn
-                    id="phoneSearchBtn"
-                    name="Search"
-                    className="rectangle"
-                    disabled={phone.replace(digitsOnly, '').length !== 10}
-                    onClick={searchCustomers} />
-            </div>
+  return (
+    <div id="darkenBackground">
+      <div id="customerSearchPanel">
+        <div id="searchBox">
+          <label htmlFor="phone">Phone Number:</label>
+          <input
+            type="text"
+            id="phone"
+            placeholder="(   )   -    "
+            value={phone}
+            onChange={handleChange}
+          />
         </div>
-    )
-}
+        <TouchBtn
+          id="phoneSearchBtn"
+          name="Search"
+          className="rectangle"
+          disabled={phone.replace(digitsOnly, "").length !== 10}
+          onClick={searchCustomers}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default CustomerSearchPanel;

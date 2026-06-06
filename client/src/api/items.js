@@ -1,20 +1,19 @@
-import {getApiUrl} from "../config/config.js";
+import { getApiUrl } from "../config/config.js";
 
 export const getItems = async () => {
-    try {
-        const response = await fetch(`${getApiUrl()}/items`, {
-            method: "GET",
-            headers: {}
-        });
-        if(response.ok) {
-            return await response.json();
-        }
-        else {
-            console.log("Error fetching items");
-            return null;
-        }
-    } catch (error) {
-        console.log(error);
-        return null;
+  try {
+    const response = await fetch(`${getApiUrl()}/items`, {
+      method: "GET",
+      headers: {},
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.log("Error fetching items");
+      return null;
     }
-}
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
