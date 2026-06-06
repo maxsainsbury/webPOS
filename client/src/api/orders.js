@@ -1,5 +1,6 @@
 import { getApiUrl } from "../config/config.js";
 
+//function to fetch order types from the API
 export const getOrderTypes = async () => {
   try {
     const response = await fetch(`${getApiUrl()}/order/types`, {
@@ -20,6 +21,7 @@ export const getOrderTypes = async () => {
   }
 };
 
+//function to fetch orders by payment status from the API
 export const getOrdersByPaymentStatus = async (paymentStatus) => {
   try {
     const response = await fetch(
@@ -40,6 +42,7 @@ export const getOrdersByPaymentStatus = async (paymentStatus) => {
   }
 };
 
+//function to fetch an order by ID from the API
 export const getOrderById = async (order) => {
   try {
     const response = await fetch(`${getApiUrl()}/orders/${order.order_id}`, {
@@ -57,6 +60,7 @@ export const getOrderById = async (order) => {
   }
 };
 
+//function to update an order in the API
 export const updateOrder = async (order) => {
   try {
     order.order.scheduled_date = new Date(order.order.scheduled_date)
@@ -81,6 +85,7 @@ export const updateOrder = async (order) => {
   }
 };
 
+//function to add an order to the API
 export const addOrder = async (order) => {
   try {
     const response = await fetch(`${getApiUrl()}/order/add`, {
@@ -102,6 +107,7 @@ export const addOrder = async (order) => {
   }
 };
 
+//function to update the in-use status of an order in the API
 export const updateInUse = async (order) => {
   try {
     const response = await fetch(`${getApiUrl()}/order/update/inuse`, {

@@ -5,15 +5,19 @@ import TouchBtn from "./TouchBtn.jsx";
 import { useEffect, useState } from "react";
 
 const SideBar = (props) => {
+  //variable to store the order types
   const { orderTypes, setOrderTypes } = useOrderTypes();
+  //variable to store the selected item in the sidebar
   const [selectedItem, setSelectedItem] = useState(null);
 
+  //function to get the order types from the database
   useEffect(() => {
     getOrderTypes().then(setOrderTypes);
   }, [setOrderTypes]);
 
   return (
     <div id="sideBar">
+      {/* if the active view is dashboard, display buttons to select a order type for a new order */}
       {props.activeView === "dashboard"
         ? orderTypes.map((orderType, index) => (
             <TouchBtn
@@ -31,6 +35,7 @@ const SideBar = (props) => {
             />
           ))
         : null}
+      {/* if the active view is order, display the current order, and buttons to modify of save the order */}
       {props.activeView === "order" ? (
         <div id="orderSidebar">
           <div id="orderInfo">

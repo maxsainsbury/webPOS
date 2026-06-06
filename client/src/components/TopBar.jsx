@@ -5,22 +5,27 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 const appWindow = getCurrentWindow();
 
 const TopBar = () => {
+  //variable to store whether the fullscreen mode is active
   let [fullscreenActive, setFullscreenActive] = useState(false);
 
   const testFunction = () => {
     console.log("testFunction");
   };
-
+  //function to toggle fullscreen mode
   const toggleFullscreen = async () => {
+    //set fullscreenActive to the opposite of its current value
     setFullscreenActive(!fullscreenActive);
     try {
+      //maximaze the tauri window
       await appWindow.maximize();
+      //set the fullscreen state to the opposite of the fullscreeActive variable
       await appWindow.setFullscreen(!fullscreenActive);
     } catch (error) {
       console.error("Failed to toggle fullscreen", error);
     }
   };
 
+  //array of the buttons in the top bar
   const btnNames = [
     { name: "test1", func: testFunction },
     { name: "test2", func: testFunction },
@@ -38,6 +43,7 @@ const TopBar = () => {
 
   return (
     <div id="topbar">
+      {/* display the buttons in the top bar */}
       {btnNames.map(({ name, func }, index) => (
         <TouchBtn
           key={index}

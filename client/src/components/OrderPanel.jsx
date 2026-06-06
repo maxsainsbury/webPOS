@@ -5,12 +5,15 @@ import TouchBtn from "./TouchBtn.jsx";
 import { useState } from "react";
 
 const OrderPanel = (props) => {
+  //get the item categories from the database
   const { categories, setCategories } = useCategories(getCategories);
+  //set a variable to store the current selected category
   const [currentCategoryId, setCurrentCategoryId] = useState(1);
 
   return (
     <div id="orderPanel">
       <div id="categories">
+        {/* if the category has items, display it in the category selection list */}
         {categories
           .filter((category) =>
             props.items.some(
@@ -27,6 +30,7 @@ const OrderPanel = (props) => {
           ))}
       </div>
       <div id="order-items">
+        {/* sort the items from the current category by name and display them in the order items list */}
         {props.items
           .filter((item) => item.category_id === currentCategoryId)
           .sort((a, b) => {

@@ -1,5 +1,6 @@
 import { getApiUrl } from "../config/config.js";
 
+//function to fetch a customer by phone number from the API
 export const getCustomerByPhone = async (phoneNumber) => {
   try {
     const response = await fetch(
@@ -21,6 +22,7 @@ export const getCustomerByPhone = async (phoneNumber) => {
   }
 };
 
+//function to fetch a customer by ID from the API
 export const getCustomerById = async (customerId) => {
   try {
     customerId = Array.isArray(customerId) ? customerId : [customerId];
@@ -49,6 +51,7 @@ export const getCustomerById = async (customerId) => {
   }
 };
 
+//function to update a customer in the API
 export const updateCustomer = async (customer) => {
   try {
     const response = await fetch(`${getApiUrl()}/customers/update`, {
@@ -65,6 +68,7 @@ export const updateCustomer = async (customer) => {
   }
 };
 
+//function to add a customer to the API
 export const addCustomer = async (customer) => {
   try {
     const response = await fetch(`${getApiUrl()}/customers/add`, {

@@ -1,5 +1,6 @@
 import { getApiUrl } from "../config/config.js";
 
+//function to fetch the categories from the API
 export const getCategories = async () => {
   try {
     const response = await fetch(`${getApiUrl()}/categories`, {
