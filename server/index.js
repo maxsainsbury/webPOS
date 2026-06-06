@@ -547,7 +547,7 @@ app.delete("/order/delete/:orderId", async (req, res) => {
     const results = await deleteOrder(req.params.orderId);
     if (results) {
       if (results.affectedRows > 0) {
-        res.status(204).send;
+        res.status(204).send();
       } else {
         res.status(400).json({ error: "Could not delete order" });
       }
