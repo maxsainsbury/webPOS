@@ -8,10 +8,6 @@ const SideBar = (props) => {
   const { orderTypes, setOrderTypes } = useOrderTypes();
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const deleteOrder = (orderId) => {
-    
-  }
-  
   useEffect(() => {
     getOrderTypes().then(setOrderTypes);
   }, [setOrderTypes]);
