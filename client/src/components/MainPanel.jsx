@@ -100,26 +100,17 @@ const MainPanel = (props) => {
   const saveOrder = async (fullOrder) => {
     if (fullOrder.items.length > 0) {
       if (fullOrder.order.order_id > 0) {
-        console.log("updating order");
         await updateOrder(fullOrder);
-        console.log("updated");
       } else {
-        console.log("adding order");
         await addOrder(fullOrder);
-        console.log("added");
       }
       fullOrder.order.in_use = false;
-      console.log("updating in use");
       await updateInUse(fullOrder.order);
-      console.log("updated in use");
     } else {
       if (fullOrder.order.order_id > 0) {
-        console.log("deleting order");
         await deleteOrderFromDB(fullOrder.order.order_id);
-        console.log("deleted");
       }
     }
-    console.log("saved");
     const updatedOrders = await fetchOrders();
     setOrders(updatedOrders);
     await loadCustomers(updatedOrders);
