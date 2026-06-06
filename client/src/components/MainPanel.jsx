@@ -14,6 +14,7 @@ import {
   getOrdersByPaymentStatus,
   updateInUse,
   updateOrder,
+  deleteOrderFromDB
 } from "../api/orders.js";
 import { getCustomerById } from "../api/customer.js";
 import { useItems } from "../hooks/useItems.js";
